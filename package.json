@@ -1,8 +1,8 @@
 {
-  "name": "soon-challenge",
+  "name": "base-nestjs-setup",
   "version": "0.0.1",
   "description": "",
-  "author": "",
+  "author": "Iglan Cardeal",
   "private": true,
   "license": "UNLICENSED",
   "engines": {
