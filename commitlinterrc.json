@@ -5,5 +5,5 @@
     "debug": "Addition for application debug purpose"
   },
   "max-len": 120,
-  "min-len": 20
+  "min-len": 12
 }
