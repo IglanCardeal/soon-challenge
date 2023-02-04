@@ -21,7 +21,7 @@ export type Total = {
   servicePrice: number
 }
 
-export interface EachDelivery {
+export interface Delivery {
   finalAddress: Address
   lastAddress: Address
   total: Omit<Total, 'servicePrice'>
@@ -29,14 +29,13 @@ export interface EachDelivery {
 
 export type ServiceType = 'guincho' | 'cegonha'
 
-export interface RequestService {
+export interface ServiceRequest {
   id: string
   serviceType: ServiceType
   createdAt: Date
   total: Total
-  initialAddress: Address
-  finalAddress: Address
+  collectionAddress: Address
   company: Company
-  deliveries: EachDelivery[]
+  deliveries: Delivery[]
   vehicles: Vehicle[]
 }
