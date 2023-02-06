@@ -1,4 +1,4 @@
-import { InvalidVehiclesQtyError } from 'src/domain/errors'
+import { InvalidServiceType, InvalidVehiclesQtyError } from 'src/domain/errors'
 import { CreateServiceRequestDTO } from 'src/domain/usecases/service-request/create-dto'
 import { DomainConstants } from 'src/domain/constants'
 import { CreateServiceRequestUseCase } from './create'
@@ -9,6 +9,7 @@ const makeFakeDomainConstants = () => ({
       guincho: 2,
       cegonha: 11,
     },
+    validServiceTypes: ['guincho', 'cegonha'],
   },
 })
 const makeSut = () => {
@@ -60,6 +61,14 @@ const makeFakeDto = (): CreateServiceRequestDTO => ({
 
 describe('CreateServiceRequestUseCase', () => {
   const { sut } = makeSut()
+
+  it('Should return InvalidServiceType when invalid service type', async () => {
+    const result = await sut.create({
+      ...makeFakeDto(),
+      serviceType: 'invalid' as any,
+    })
+    expect(result).toBeInstanceOf(InvalidServiceType)
+  })
 
   it('Should return InvalidVehiclesQtyError error when more than 2 vehicles for a service type "guincho"', async () => {
     const result = await sut.create(makeFakeDto())
