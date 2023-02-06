@@ -1,6 +1,6 @@
 import { DomainConstants } from 'src/domain/constants'
 import { InvalidServiceType, InvalidVehiclesQtyError } from 'src/domain/errors'
-import { ServiceRequest } from 'src/domain/model/service-request'
+import { ServiceRequest, Vehicle } from 'src/domain/model/service-request'
 import { CreateServiceRequest } from 'src/domain/usecases/service-request/create'
 import { CreateServiceRequestDTO } from 'src/domain/usecases/service-request/create-dto'
 
@@ -18,12 +18,34 @@ export class CreateServiceRequestUseCase implements CreateServiceRequest {
       return new InvalidServiceType(serviceType, validServiceTypes)
     }
 
-    if (serviceType === 'guincho' && vehicles.length > maxVehicles.guincho) {
+    if (this.checkVehiclesQtyForGuincho(serviceType, vehicles)) {
       return new InvalidVehiclesQtyError(
         `Invalid vehicle quantity for type ${serviceType}. Max of ${maxVehicles.guincho} vehicles.`,
       )
     }
 
+    if (this.checkVehiclesQtyForCegonha(serviceType, vehicles)) {
+      return new InvalidVehiclesQtyError(
+        `Invalid vehicle quantity for type ${serviceType}. Max of ${maxVehicles.cegonha} vehicles.`,
+      )
+    }
+
     return {} as any
+  }
+
+  private checkVehiclesQtyForGuincho(
+    serviceType: string,
+    vehicles: Vehicle[],
+  ): boolean {
+    const { maxVehicles } = this.domainConstants.requestService
+    return serviceType === 'guincho' && vehicles.length > maxVehicles.guincho
+  }
+
+  private checkVehiclesQtyForCegonha(
+    serviceType: string,
+    vehicles: Vehicle[],
+  ): boolean {
+    const { maxVehicles } = this.domainConstants.requestService
+    return serviceType === 'cegonha' && vehicles.length > maxVehicles.cegonha
   }
 }
