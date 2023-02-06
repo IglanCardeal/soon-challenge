@@ -22,6 +22,7 @@ export const domainConstants = Object.freeze({
   requestService: {
     maxVehicles,
     pricePerKm,
+    validServiceTypes: ['guincho', 'cegonha'],
   },
 })
 
