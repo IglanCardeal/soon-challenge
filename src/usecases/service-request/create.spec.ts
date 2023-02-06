@@ -50,28 +50,40 @@ const makeFakeDto = (): CreateServiceRequestDTO => ({
       year: '2012',
       plate: 'CDE-1234',
     },
-    {
-      brand: 'Ford',
-      model: 'Wrangler',
-      year: '2015',
-      plate: 'ZXW-1234',
-    },
   ],
 })
 
 describe('CreateServiceRequestUseCase', () => {
+  let fakeDto: CreateServiceRequestDTO
   const { sut } = makeSut()
+
+  beforeEach(() => {
+    fakeDto = makeFakeDto()
+  })
 
   it('Should return InvalidServiceType when invalid service type', async () => {
     const result = await sut.create({
-      ...makeFakeDto(),
+      ...fakeDto,
       serviceType: 'invalid' as any,
     })
     expect(result).toBeInstanceOf(InvalidServiceType)
   })
 
   it('Should return InvalidVehiclesQtyError error when more than 2 vehicles for a service type "guincho"', async () => {
-    const result = await sut.create(makeFakeDto())
+    fakeDto.vehicles.push({
+      brand: 'Ford',
+      model: 'Wrangler',
+      year: '2015',
+      plate: 'ZXW-1234',
+    })
+    const result = await sut.create(fakeDto)
+    expect(result).toBeInstanceOf(InvalidVehiclesQtyError)
+  })
+
+  it('Should return InvalidVehiclesQtyError error when more than 11 vehicles for a service type "cegonha"', async () => {
+    fakeDto.serviceType = 'cegonha'
+    fakeDto.vehicles.length = 12
+    const result = await sut.create(fakeDto)
     expect(result).toBeInstanceOf(InvalidVehiclesQtyError)
   })
 })
