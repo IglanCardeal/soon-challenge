@@ -30,8 +30,8 @@ const makeFakeDto = (): CreateServiceRequestDTO => ({
   },
   serviceType: 'guincho',
   collectionAddress: {
-    lat: '-58.6521',
-    long: '-87.1162',
+    lat: -58.6521,
+    long: -87.1162,
   },
   vehicles: [
     {
@@ -41,8 +41,8 @@ const makeFakeDto = (): CreateServiceRequestDTO => ({
       plate: 'ABC-1234',
       delivery: {
         finalAddress: {
-          lat: '-58.7521',
-          long: '-87.2162',
+          lat: -58.7521,
+          long: -87.2162,
         },
       },
     },
@@ -53,8 +53,8 @@ const makeFakeDto = (): CreateServiceRequestDTO => ({
       plate: 'CDE-1234',
       delivery: {
         finalAddress: {
-          lat: '-58.7521',
-          long: '-87.2162',
+          lat: -58.7521,
+          long: -87.2162,
         },
       },
     },
@@ -93,8 +93,8 @@ describe('CreateServiceRequestUseCase', () => {
       plate: 'ZXW-1234',
       delivery: {
         finalAddress: {
-          lat: '-58.7521',
-          long: '-87.2162',
+          lat: -58.7521,
+          long: -87.2162,
         },
       },
     })
@@ -116,8 +116,8 @@ describe('CreateServiceRequestUseCase', () => {
       plate: 'ZXW-1234',
       delivery: {
         finalAddress: {
-          lat: '-58.7521',
-          long: '-87.2162',
+          lat: -58.7521,
+          long: -87.2162,
         },
       },
     })

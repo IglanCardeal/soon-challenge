@@ -18,8 +18,8 @@ export type Vehicle = {
 }
 
 export type Address = {
-  lat: string
-  long: string
+  lat: number
+  long: number
 }
 
 export type Total = {
