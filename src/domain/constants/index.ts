@@ -24,3 +24,5 @@ export const domainConstants = Object.freeze({
     pricePerKm,
   },
 })
+
+export type DomainConstants = typeof domainConstants
