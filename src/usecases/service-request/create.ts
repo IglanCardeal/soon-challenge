@@ -11,19 +11,26 @@ export class CreateServiceRequestUseCase implements CreateServiceRequest {
     data: CreateServiceRequestDTO,
   ): Promise<ServiceRequest | InvalidVehiclesQtyError> {
     const { serviceType, vehicles } = data
-    const { maxVehicles, validServiceTypes } =
-      this.domainConstants.requestService
+
+    if (!vehicles.length) {
+      return new InvalidVehiclesQtyError('Invalid vehicle quantity 0.')
+    }
+
+    const {
+      maxVehicles: { cegonha, guincho },
+      validServiceTypes,
+    } = this.domainConstants.requestService
 
     if (!validServiceTypes.includes(serviceType)) {
       return new InvalidServiceType(serviceType, validServiceTypes)
     }
 
-    if (this.checkVehiclesQtyForGuincho(serviceType, vehicles)) {
-      return this.invalidVehiclesQtyError(serviceType, maxVehicles.guincho)
+    if (this.checkVehiclesQtyForGuincho(serviceType, vehicles, guincho)) {
+      return this.invalidVehiclesQtyErrorFactory(serviceType, guincho)
     }
 
-    if (this.checkVehiclesQtyForCegonha(serviceType, vehicles)) {
-      return this.invalidVehiclesQtyError(serviceType, maxVehicles.cegonha)
+    if (this.checkVehiclesQtyForCegonha(serviceType, vehicles, cegonha)) {
+      return this.invalidVehiclesQtyErrorFactory(serviceType, cegonha)
     }
 
     return {} as any
@@ -32,20 +39,23 @@ export class CreateServiceRequestUseCase implements CreateServiceRequest {
   private checkVehiclesQtyForGuincho(
     serviceType: string,
     vehicles: Vehicle[],
+    maxVehicles: number,
   ): boolean {
-    const { maxVehicles } = this.domainConstants.requestService
-    return serviceType === 'guincho' && vehicles.length > maxVehicles.guincho
+    return serviceType === 'guincho' && vehicles.length > maxVehicles
   }
 
   private checkVehiclesQtyForCegonha(
     serviceType: string,
     vehicles: Vehicle[],
+    maxVehicles: number,
   ): boolean {
-    const { maxVehicles } = this.domainConstants.requestService
-    return serviceType === 'cegonha' && vehicles.length > maxVehicles.cegonha
+    return serviceType === 'cegonha' && vehicles.length > maxVehicles
   }
 
-  private invalidVehiclesQtyError(serviceType: string, maxVehicles: number) {
+  private invalidVehiclesQtyErrorFactory(
+    serviceType: string,
+    maxVehicles: number,
+  ) {
     return new InvalidVehiclesQtyError(
       `Invalid vehicle quantity for type ${serviceType}. Max of ${maxVehicles} vehicles.`,
     )
