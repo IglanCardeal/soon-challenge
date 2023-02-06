@@ -12,3 +12,10 @@ export class InvalidServiceType extends Error {
     this.message = `Invalid service type ${type}. ${valids}`
   }
 }
+
+export class InvalidFinalAddressError extends Error {
+  constructor(plate: string) {
+    super('InvalidFinalAddressError')
+    this.message = `The vehicle with the plate ${plate} has the final address equal to the collection address`
+  }
+}

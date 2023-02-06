@@ -1,6 +1,10 @@
 import { DomainConstants } from 'src/domain/constants'
-import { InvalidServiceType, InvalidVehiclesQtyError } from 'src/domain/errors'
-import { ServiceRequest, Vehicle } from 'src/domain/model/service-request'
+import {
+  InvalidFinalAddressError,
+  InvalidServiceType,
+  InvalidVehiclesQtyError,
+} from 'src/domain/errors'
+import { ServiceRequest } from 'src/domain/model/service-request'
 import { CreateServiceRequest } from 'src/domain/usecases/service-request/create'
 import { CreateServiceRequestDTO } from 'src/domain/usecases/service-request/create-dto'
 
@@ -10,10 +14,19 @@ export class CreateServiceRequestUseCase implements CreateServiceRequest {
   async create(
     data: CreateServiceRequestDTO,
   ): Promise<ServiceRequest | InvalidVehiclesQtyError> {
-    const { serviceType, vehicles } = data
+    const { serviceType, vehicles, collectionAddress } = data
 
     if (!vehicles.length) {
       return new InvalidVehiclesQtyError('Invalid vehicle quantity 0.')
+    }
+
+    const hasOneInvalidFinalAddress = vehicles.find((vel) => {
+      return vel.delivery.finalAddress === collectionAddress
+    })
+
+    if (hasOneInvalidFinalAddress) {
+      const { plate } = hasOneInvalidFinalAddress
+      return new InvalidFinalAddressError(plate)
     }
 
     const {
@@ -38,7 +51,7 @@ export class CreateServiceRequestUseCase implements CreateServiceRequest {
 
   private checkVehiclesQtyForGuincho(
     serviceType: string,
-    vehicles: Vehicle[],
+    vehicles: any[],
     maxVehicles: number,
   ): boolean {
     return serviceType === 'guincho' && vehicles.length > maxVehicles
@@ -46,7 +59,7 @@ export class CreateServiceRequestUseCase implements CreateServiceRequest {
 
   private checkVehiclesQtyForCegonha(
     serviceType: string,
-    vehicles: Vehicle[],
+    vehicles: any[],
     maxVehicles: number,
   ): boolean {
     return serviceType === 'cegonha' && vehicles.length > maxVehicles
