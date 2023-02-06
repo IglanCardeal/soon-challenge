@@ -4,9 +4,12 @@ import {
   InvalidServiceType,
   InvalidVehiclesQtyError,
 } from 'src/domain/errors'
-import { ServiceRequest } from 'src/domain/model/service-request'
+import { Address, ServiceRequest } from 'src/domain/model/service-request'
 import { CreateServiceRequest } from 'src/domain/usecases/service-request/create'
-import { CreateServiceRequestDTO } from 'src/domain/usecases/service-request/create-dto'
+import {
+  CreateServiceRequestDTO,
+  VehicleDTO,
+} from 'src/domain/usecases/service-request/create-dto'
 
 export class CreateServiceRequestUseCase implements CreateServiceRequest {
   constructor(private readonly domainConstants: DomainConstants) {}
@@ -20,13 +23,13 @@ export class CreateServiceRequestUseCase implements CreateServiceRequest {
       return new InvalidVehiclesQtyError('Invalid vehicle quantity 0.')
     }
 
-    const hasOneInvalidFinalAddress = vehicles.find((vel) => {
-      return vel.delivery.finalAddress === collectionAddress
-    })
+    const hasOneInvalidFinalAddress = this.hasOneInvalidFinalAddress(
+      vehicles,
+      collectionAddress,
+    )
 
     if (hasOneInvalidFinalAddress) {
-      const { plate } = hasOneInvalidFinalAddress
-      return new InvalidFinalAddressError(plate)
+      return new InvalidFinalAddressError(hasOneInvalidFinalAddress.plate)
     }
 
     const {
@@ -47,6 +50,15 @@ export class CreateServiceRequestUseCase implements CreateServiceRequest {
     }
 
     return {} as any
+  }
+
+  private hasOneInvalidFinalAddress(
+    vehicles: VehicleDTO[],
+    collectionAddress: Address,
+  ): VehicleDTO | undefined {
+    return vehicles.find(
+      (vel) => vel.delivery.finalAddress === collectionAddress,
+    )
   }
 
   private checkVehiclesQtyForGuincho(
