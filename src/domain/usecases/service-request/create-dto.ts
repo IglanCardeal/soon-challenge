@@ -10,6 +10,6 @@ export interface CreateServiceRequestDTO {
   company: Company
   serviceType: ServiceType
   collectionAddress: Address
-  deliveries: Delivery[]
+  deliveries: Pick<Delivery, 'finalAddress'>[]
   vehicles: Vehicle[]
 }
