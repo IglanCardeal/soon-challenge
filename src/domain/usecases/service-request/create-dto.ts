@@ -3,13 +3,19 @@ import {
   Company,
   Delivery,
   ServiceType,
-  Vehicle,
 } from 'src/domain/model/service-request'
+
+export interface VehicleDTO {
+  plate: string
+  model: string
+  brand: string
+  year: string
+  delivery: Omit<Delivery, 'lastAddress' | 'total'>
+}
 
 export interface CreateServiceRequestDTO {
   company: Company
   serviceType: ServiceType
   collectionAddress: Address
-  deliveries: Pick<Delivery, 'finalAddress'>[]
-  vehicles: Vehicle[]
+  vehicles: VehicleDTO[]
 }
