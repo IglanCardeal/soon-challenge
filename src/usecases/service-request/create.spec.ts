@@ -69,6 +69,14 @@ describe('CreateServiceRequestUseCase', () => {
     expect(result).toBeInstanceOf(InvalidServiceType)
   })
 
+  it('Should return InvalidVehiclesQtyError error when no vehicles', async () => {
+    fakeDto.vehicles = []
+    const result = await sut.create(fakeDto)
+    expect(result).toEqual(
+      new InvalidVehiclesQtyError('Invalid vehicle quantity 0.'),
+    )
+  })
+
   it('Should return InvalidVehiclesQtyError error when more than 2 vehicles for a service type "guincho"', async () => {
     fakeDto.vehicles.push({
       brand: 'Ford',
