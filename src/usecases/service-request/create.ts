@@ -19,15 +19,11 @@ export class CreateServiceRequestUseCase implements CreateServiceRequest {
     }
 
     if (this.checkVehiclesQtyForGuincho(serviceType, vehicles)) {
-      return new InvalidVehiclesQtyError(
-        `Invalid vehicle quantity for type ${serviceType}. Max of ${maxVehicles.guincho} vehicles.`,
-      )
+      return this.invalidVehiclesQtyError(serviceType, maxVehicles.guincho)
     }
 
     if (this.checkVehiclesQtyForCegonha(serviceType, vehicles)) {
-      return new InvalidVehiclesQtyError(
-        `Invalid vehicle quantity for type ${serviceType}. Max of ${maxVehicles.cegonha} vehicles.`,
-      )
+      return this.invalidVehiclesQtyError(serviceType, maxVehicles.cegonha)
     }
 
     return {} as any
@@ -47,5 +43,11 @@ export class CreateServiceRequestUseCase implements CreateServiceRequest {
   ): boolean {
     const { maxVehicles } = this.domainConstants.requestService
     return serviceType === 'cegonha' && vehicles.length > maxVehicles.cegonha
+  }
+
+  private invalidVehiclesQtyError(serviceType: string, maxVehicles: number) {
+    return new InvalidVehiclesQtyError(
+      `Invalid vehicle quantity for type ${serviceType}. Max of ${maxVehicles} vehicles.`,
+    )
   }
 }

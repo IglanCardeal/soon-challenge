@@ -77,13 +77,21 @@ describe('CreateServiceRequestUseCase', () => {
       plate: 'ZXW-1234',
     })
     const result = await sut.create(fakeDto)
-    expect(result).toBeInstanceOf(InvalidVehiclesQtyError)
+    expect(result).toEqual(
+      new InvalidVehiclesQtyError(
+        'Invalid vehicle quantity for type guincho. Max of 2 vehicles.',
+      ),
+    )
   })
 
   it('Should return InvalidVehiclesQtyError error when more than 11 vehicles for a service type "cegonha"', async () => {
     fakeDto.serviceType = 'cegonha'
     fakeDto.vehicles.length = 12
     const result = await sut.create(fakeDto)
-    expect(result).toBeInstanceOf(InvalidVehiclesQtyError)
+    expect(result).toEqual(
+      new InvalidVehiclesQtyError(
+        'Invalid vehicle quantity for type cegonha. Max of 11 vehicles.',
+      ),
+    )
   })
 })
