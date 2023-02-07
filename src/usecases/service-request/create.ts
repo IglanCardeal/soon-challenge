@@ -60,13 +60,15 @@ export class CreateServiceRequestUseCase implements CreateServiceRequest {
     }
 
     if (
-      this.checkInvalidVehiclesQtyForGuincho(serviceType, vehicles, guincho)
+      serviceType === 'guincho' &&
+      this.checkInvalidVehiclesQty(vehicles, guincho)
     ) {
       return this.invalidVehiclesQtyErrorFactory(serviceType, guincho)
     }
 
     if (
-      this.checkInvalidVehiclesQtyForCegonha(serviceType, vehicles, cegonha)
+      serviceType === 'cegonha' &&
+      this.checkInvalidVehiclesQty(vehicles, cegonha)
     ) {
       return this.invalidVehiclesQtyErrorFactory(serviceType, cegonha)
     }
@@ -115,20 +117,11 @@ export class CreateServiceRequestUseCase implements CreateServiceRequest {
     return deliveries.find((vel) => vel.finalAddress === collectionAddress)
   }
 
-  private checkInvalidVehiclesQtyForGuincho(
-    serviceType: string,
+  private checkInvalidVehiclesQty(
     vehicles: any[],
     maxVehicles: number,
   ): boolean {
-    return serviceType === 'guincho' && vehicles.length > maxVehicles
-  }
-
-  private checkInvalidVehiclesQtyForCegonha(
-    serviceType: string,
-    vehicles: any[],
-    maxVehicles: number,
-  ): boolean {
-    return serviceType === 'cegonha' && vehicles.length > maxVehicles
+    return vehicles.length > maxVehicles
   }
 
   private invalidVehiclesQtyErrorFactory(
