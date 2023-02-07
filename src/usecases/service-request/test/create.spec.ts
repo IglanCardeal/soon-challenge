@@ -13,8 +13,16 @@ import {
   DomainConstants,
   CalculateDistanceAndDurationProviderResponse,
 } from '../create-contracts'
-import { makeFakeDomainConstants, makeFakeDto } from './fakers'
-import { expectedServiceRequest } from './expectations'
+import {
+  makeFakeCegonhaDto,
+  makeFakeDomainConstants,
+  makeFakeDto,
+} from './fakers'
+import {
+  expectedServiceRequest,
+  expectedServiceRequestForCegonha,
+  expectedServiceRequestForCegonhaWithBasePrice,
+} from './expectations'
 
 class CalculateDistanceAndDurationProviderStub
   implements CalculateDistanceAndDurationProvider
@@ -181,5 +189,83 @@ describe('CreateServiceRequestUseCase', () => {
     const saveSpy = jest.spyOn(serviceRequestRepositoryStub, 'save')
     await sut.create(fakeDto)
     expect(saveSpy).toHaveBeenCalledWith(expectedServiceRequest)
+  })
+
+  it('Should call serviceRequestRepository with correct formated and ordered values for cegonha service', async () => {
+    jest.restoreAllMocks()
+    const fromOriginToDestinySpy = jest.spyOn(
+      calculateDistanceAndDurationStub,
+      'fromOriginToDestiny',
+    )
+    fromOriginToDestinySpy
+      .mockResolvedValueOnce({
+        distance: 6,
+        duration: 10,
+      })
+      .mockResolvedValueOnce({
+        distance: 2,
+        duration: 2,
+      })
+      .mockResolvedValueOnce({
+        distance: 3,
+        duration: 5,
+      })
+    const saveSpy = jest.spyOn(serviceRequestRepositoryStub, 'save')
+    fromOriginToDestinySpy
+      .mockResolvedValueOnce({
+        distance: 2,
+        duration: 2,
+      })
+      .mockResolvedValueOnce({
+        distance: 1,
+        duration: 3,
+      })
+      .mockResolvedValueOnce({
+        distance: 4,
+        duration: 8,
+      })
+    await sut.create(makeFakeCegonhaDto())
+    expect(saveSpy).toHaveBeenCalled()
+    expect(saveSpy).toHaveBeenCalledWith(expectedServiceRequestForCegonha)
+  })
+
+  it('Should call serviceRequestRepository with correct formated and ordered values for cegonha service with base price', async () => {
+    jest.restoreAllMocks()
+    const fromOriginToDestinySpy = jest.spyOn(
+      calculateDistanceAndDurationStub,
+      'fromOriginToDestiny',
+    )
+    fromOriginToDestinySpy
+      .mockResolvedValueOnce({
+        distance: 2,
+        duration: 10,
+      })
+      .mockResolvedValueOnce({
+        distance: 1,
+        duration: 2,
+      })
+      .mockResolvedValueOnce({
+        distance: 1,
+        duration: 5,
+      })
+    const saveSpy = jest.spyOn(serviceRequestRepositoryStub, 'save')
+    fromOriginToDestinySpy
+      .mockResolvedValueOnce({
+        distance: 1,
+        duration: 2,
+      })
+      .mockResolvedValueOnce({
+        distance: 1,
+        duration: 3,
+      })
+      .mockResolvedValueOnce({
+        distance: 1,
+        duration: 8,
+      })
+    await sut.create(makeFakeCegonhaDto())
+    expect(saveSpy).toHaveBeenCalled()
+    expect(saveSpy).toHaveBeenCalledWith(
+      expectedServiceRequestForCegonhaWithBasePrice,
+    )
   })
 })
