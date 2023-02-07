@@ -2,4 +2,48 @@
 @port = 3000
 @base_url = http://localhost:3000
 
-GET {{base_url}}
+# Create Request Service
+curl --request POST \
+  --url http://localhost:3000/api/v1/service-request/create \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "company": {
+    "id": 1,
+    "name": "Wells"
+  },
+  "serviceType": "guincho",
+  "collectionAddress": {
+    "lat": -1.369406,
+    "long": -48.380052
+  },
+  "deliveries": [
+    {
+      "finalAddress": {
+        "lat": -1.368226,
+        "long": -48.377295
+      },
+      "vehicles": [
+        {
+          "brand": "VW",
+          "model": "Gol",
+          "year": "2015",
+          "plate": "ABC-1234"
+        }
+      ]
+    },
+    {
+      "finalAddress": {
+        "lat": -1.369100,
+        "long": -48.383126
+      },
+      "vehicles": [
+        {
+          "brand": "Ford",
+          "model": "Wrangler",
+          "year": "2012",
+          "plate": "CDE-1234"
+        }
+      ]
+    }
+  ]
+}'
