@@ -1,5 +1,5 @@
 import { ServiceRequest } from 'src/domain/model/service-request'
-import { createRandomCompanyClient } from '../utils'
+import { createRandomCompanyClient } from '../../utils'
 
 const makeFakeServiceRequest = async (): Promise<
   Omit<ServiceRequest, 'id'>

@@ -1,7 +1,7 @@
-import { clearAllCompanyClients } from '../utils'
+import { clearAllCompanyClients } from '../../utils'
 import { serviceRequestCreated } from './expectation'
 import { makeFakeServiceRequest } from './faker'
-import { PostgreServiceRequestRepository } from './service-request-repository'
+import { PostgreServiceRequestRepository } from '../service-request-repository'
 
 const makeSut = () => new PostgreServiceRequestRepository()
 
