@@ -1,7 +1,6 @@
-export type Company = {
-  id: string
-  name: string
-}
+import { Company } from './company'
+
+export { Company }
 
 export type Vehicle = {
   plate: string

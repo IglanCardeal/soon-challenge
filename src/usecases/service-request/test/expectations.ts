@@ -4,7 +4,7 @@ const expectedServiceRequest = {
     long: -87.1162,
   },
   company: {
-    id: 'company_id',
+    id: expect.any(Number),
     name: 'Wells',
   },
   serviceType: 'guincho',
@@ -78,7 +78,7 @@ const expectedServiceRequest = {
 
 const expectedServiceRequestForCegonha = {
   collectionAddress: { lat: -58.6521, long: -87.1162 },
-  company: { id: 'company_id', name: 'CarOps' },
+  company: { id: expect.any(Number), name: 'CarOps' },
   deliveries: [
     {
       finalAddress: { lat: -58.7523, long: -87.2181 },
@@ -134,7 +134,7 @@ const expectedServiceRequestForCegonha = {
 
 const expectedServiceRequestForCegonhaWithBasePrice = {
   collectionAddress: { lat: -58.6521, long: -87.1162 },
-  company: { id: 'company_id', name: 'CarOps' },
+  company: { id: expect.any(Number), name: 'CarOps' },
   deliveries: [
     {
       finalAddress: { lat: -58.7523, long: -87.2181 },

@@ -24,7 +24,7 @@ const makeFakeDomainConstants = () => ({
 
 const makeFakeDto = (): CreateServiceRequestDTO => ({
   company: {
-    id: 'company_id',
+    id: 1,
     name: 'Wells',
   },
   serviceType: 'guincho',
@@ -66,7 +66,7 @@ const makeFakeDto = (): CreateServiceRequestDTO => ({
 
 const makeFakeCegonhaDto = (): CreateServiceRequestDTO => ({
   company: {
-    id: 'company_id',
+    id: 1,
     name: 'CarOps',
   },
   serviceType: 'cegonha',
