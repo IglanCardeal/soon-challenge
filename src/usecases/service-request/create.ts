@@ -28,13 +28,12 @@ export class CreateServiceRequestUseCase implements CreateServiceRequest {
     data: CreateServiceRequestDTO,
   ): Promise<ServiceRequest | InvalidVehiclesQtyError> {
     const { serviceType, deliveries, collectionAddress, company } = data
+    const hasDeliveryWithouVehicle = deliveries.find(
+      (del) => !del.vehicles.length,
+    )
     const vehicles = deliveries
       .map((del) => del.vehicles.map((veh) => veh))
       .flat()
-
-    const hasDeliveryWithouVehicle = deliveries.find(
-      (del) => !del.vehicles?.length,
-    )
 
     if (!vehicles.length || hasDeliveryWithouVehicle) {
       return new InvalidVehiclesQtyError('Invalid vehicle quantity 0.')
