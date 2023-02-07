@@ -1,7 +1,7 @@
 import * as nock from 'nock'
 import { Address } from 'src/domain/model/service-request'
 import { config } from 'src/infra/config'
-import { GoogleCalculateDistanceAndDurationProvider } from './calculate-distance-provider'
+import { GoogleCalculateDistanceAndDurationProvider } from '../calculate-distance-provider'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const mockJsonResponse = require('./mock.json')
@@ -28,8 +28,8 @@ describe('GoogleCalculateDistanceAndDurationProvider', () => {
   it('Should return the correct distance and duration on success', async () => {
     const result = await sut.fromOriginToDestiny(origin, destiny)
     expect(result).toEqual({
-      distance: 2132,
-      duration: 231,
+      distance: 2.13,
+      duration: 3.85,
     })
   })
 })
