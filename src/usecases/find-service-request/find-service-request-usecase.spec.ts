@@ -2,12 +2,14 @@ import {
   FindServiceRequestRepository,
   ServiceRequest,
 } from './find-service-request-contracts'
+import { expectedServiceRequest } from './expectations'
 import { FindServiceRequestUseCase } from './find-service-request-usecase'
 
 class FindServiceRequestRepositoryStub implements FindServiceRequestRepository {
-  async findById(id: string): Promise<ServiceRequest> {
+  async findById(id: string): Promise<ServiceRequest | null> {
     return {
       id,
+      ...expectedServiceRequest,
     } as ServiceRequest
   }
 }
@@ -35,5 +37,13 @@ describe('FindServiceRequestUseCase', () => {
       .spyOn(findServiceRequestRepositoryStub, 'findById')
       .mockRejectedValueOnce(new Error())
     await expect(sut.find('A123')).rejects.toThrow(new Error())
+  })
+
+  it('Should return the service request data on success', async () => {
+    const result = await sut.find('A123')
+    expect(result).toEqual({
+      ...expectedServiceRequest,
+      id: 'A123',
+    })
   })
 })
