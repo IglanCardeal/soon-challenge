@@ -8,7 +8,7 @@ import { Address, ServiceRequest } from 'src/domain/model/service-request'
 import { CreateServiceRequest } from 'src/domain/usecases/service-request/create'
 import {
   CreateServiceRequestDTO,
-  VehicleDTO,
+  DeliveryDTO,
 } from 'src/domain/usecases/service-request/create-dto'
 
 export class CreateServiceRequestUseCase implements CreateServiceRequest {
@@ -17,19 +17,27 @@ export class CreateServiceRequestUseCase implements CreateServiceRequest {
   async create(
     data: CreateServiceRequestDTO,
   ): Promise<ServiceRequest | InvalidVehiclesQtyError> {
-    const { serviceType, vehicles, collectionAddress } = data
+    const { serviceType, deliveries, collectionAddress } = data
+    const vehicles = deliveries
+      .map((del) => del.vehicles.map((veh) => veh))
+      .flat()
 
-    if (!vehicles.length) {
+    const hasDeliveryWithouVehicle = deliveries.find(
+      (del) => !del.vehicles?.length,
+    )
+
+    if (!vehicles.length || hasDeliveryWithouVehicle) {
       return new InvalidVehiclesQtyError('Invalid vehicle quantity 0.')
     }
 
     const hasOneInvalidFinalAddress = this.hasOneInvalidFinalAddress(
-      vehicles,
+      deliveries,
       collectionAddress,
     )
 
     if (hasOneInvalidFinalAddress) {
-      return new InvalidFinalAddressError(hasOneInvalidFinalAddress.plate)
+      const plates = hasOneInvalidFinalAddress.vehicles.map((vel) => vel.plate)
+      return new InvalidFinalAddressError(plates.join(', '))
     }
 
     const {
@@ -53,12 +61,10 @@ export class CreateServiceRequestUseCase implements CreateServiceRequest {
   }
 
   private hasOneInvalidFinalAddress(
-    vehicles: VehicleDTO[],
+    deliveries: DeliveryDTO[],
     collectionAddress: Address,
-  ): VehicleDTO | undefined {
-    return vehicles.find(
-      (vel) => vel.delivery.finalAddress === collectionAddress,
-    )
+  ): DeliveryDTO | undefined {
+    return deliveries.find((vel) => vel.finalAddress === collectionAddress)
   }
 
   private checkVehiclesQtyForGuincho(

@@ -3,18 +3,18 @@ export type Company = {
   name: string
 }
 
-export interface Delivery {
-  finalAddress: Address
-  lastAddress: Address
-  total: Omit<Total, 'servicePrice'>
-}
-
 export type Vehicle = {
   plate: string
   model: string
   brand: string
   year: string
-  delivery: Delivery
+}
+
+export interface Delivery {
+  vehicles: Vehicle[]
+  finalAddress: Address
+  lastAddress: Address
+  total: Omit<Total, 'servicePrice'>
 }
 
 export type Address = {
@@ -36,6 +36,7 @@ export interface ServiceRequest {
   createdAt: Date
   total: Total
   collectionAddress: Address
-  company: Company
+  deliveries: Delivery[]
   vehicles: Vehicle[]
+  company: Company
 }
