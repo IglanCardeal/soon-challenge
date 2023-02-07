@@ -15,3 +15,7 @@ export interface CalculateDistanceAndDurationProvider {
 export interface ServiceRequestRepository {
   save(serviceRequest: Omit<ServiceRequest, 'id'>): Promise<ServiceRequest>
 }
+
+export interface FindServiceRequestRepository {
+  findById(id: string): Promise<ServiceRequest | null>
+}
