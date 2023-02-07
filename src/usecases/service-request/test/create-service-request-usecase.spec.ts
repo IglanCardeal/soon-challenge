@@ -12,7 +12,7 @@ import {
   ServiceRequestRepository,
   DomainConstants,
   CalculateDistanceAndDurationProviderResponse,
-} from '../contracts'
+} from '../create-service-request-contracts'
 import {
   makeFakeCegonhaDto,
   makeFakeDomainConstants,

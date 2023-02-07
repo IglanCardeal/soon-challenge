@@ -15,7 +15,7 @@ import {
   CalculateDistanceAndDurationProvider,
   ServiceRequestRepository,
   DomainConstants,
-} from './contracts'
+} from './create-service-request-contracts'
 
 export class CreateServiceRequestUseCase implements CreateServiceRequest {
   constructor(
