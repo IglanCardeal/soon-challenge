@@ -1,6 +1,6 @@
 -- CreateTable
 CREATE TABLE "Company" (
-    "id" TEXT NOT NULL,
+    "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
 
     CONSTRAINT "Company_pkey" PRIMARY KEY ("id")
@@ -15,7 +15,7 @@ CREATE TABLE "ServiceRequest" (
     "collectionAddress" JSONB NOT NULL,
     "deliveries" JSONB NOT NULL,
     "vehicles" JSONB NOT NULL,
-    "companyId" TEXT NOT NULL,
+    "companyId" INTEGER NOT NULL,
 
     CONSTRAINT "ServiceRequest_pkey" PRIMARY KEY ("id")
 );

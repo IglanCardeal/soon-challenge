@@ -8,7 +8,7 @@ datasource db {
 }
 
 model Company {
-  id             String           @id @default(uuid())
+  id             Int              @id @default(autoincrement())
   name           String
   ServiceRequest ServiceRequest[]
 }
@@ -22,5 +22,5 @@ model ServiceRequest {
   deliveries        Json
   vehicles          Json
   company           Company  @relation(references: [id], fields: [companyId])
-  companyId         String
+  companyId         Int
 }
