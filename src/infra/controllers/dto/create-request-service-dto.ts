@@ -74,3 +74,9 @@ export class ControllerCreateRequestServiceDTO {
   @Type(() => Delivery)
   deliveries: Delivery[]
 }
+
+export class FindParams {
+  @IsString()
+  @IsNotEmpty()
+  id: string
+}

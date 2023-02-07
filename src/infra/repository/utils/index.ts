@@ -5,8 +5,8 @@ const prisma = new PrismaClient()
 export async function createRandomCompanyClient(name: string, id: number) {
   return await prisma.company.upsert({
     where: { id },
-    update: { name },
-    create: { name },
+    update: { name: name },
+    create: { id, name: name },
   })
 }
 
