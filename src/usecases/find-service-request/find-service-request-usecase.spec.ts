@@ -29,4 +29,11 @@ describe('FindServiceRequestUseCase', () => {
     await sut.find('A123')
     expect(findByIdSpy).toHaveBeenCalledWith('A123')
   })
+
+  it('Should throw if FindServiceRequestRepository throws', async () => {
+    jest
+      .spyOn(findServiceRequestRepositoryStub, 'findById')
+      .mockRejectedValueOnce(new Error())
+    await expect(sut.find('A123')).rejects.toThrow(new Error())
+  })
 })
