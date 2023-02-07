@@ -3,7 +3,7 @@ import {
   InvalidServiceType,
   InvalidVehiclesQtyError,
 } from 'src/domain/errors'
-import { CreateServiceRequestUseCase } from '../create'
+import { CreateServiceRequestUseCase } from '../create-service-request-usecase'
 import {
   CreateServiceRequestDTO,
   Address,
@@ -12,7 +12,7 @@ import {
   ServiceRequestRepository,
   DomainConstants,
   CalculateDistanceAndDurationProviderResponse,
-} from '../create-contracts'
+} from '../contracts'
 import {
   makeFakeCegonhaDto,
   makeFakeDomainConstants,

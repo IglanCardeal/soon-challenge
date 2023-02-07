@@ -76,7 +76,7 @@
       "^.+\\.(t|j)s$": "ts-jest"
     },
     "collectCoverageFrom": [
-      "usecases/**/*.ts",
+      "usecases/**/*-usecase.ts",
       "!usecases/**/test/**"
     ],
     "coverageDirectory": "../coverage",
