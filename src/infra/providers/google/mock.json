@@ -1,0 +1,24 @@
+{
+  "destination_addresses": [
+    "Br 316 KM 8 BR-316 Sala 17 - Águas Brancas, Ananindeua - PA, 67030-100, Brazil"
+  ],
+  "origin_addresses": ["R. A, 24 - Centro, Ananindeua - PA, 67030-070, Brazil"],
+  "rows": [
+    {
+      "elements": [
+        {
+          "distance": {
+            "text": "2.1 km",
+            "value": 2132
+          },
+          "duration": {
+            "text": "4 mins",
+            "value": 231
+          },
+          "status": "OK"
+        }
+      ]
+    }
+  ],
+  "status": "OK"
+}
