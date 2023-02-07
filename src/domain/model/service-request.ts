@@ -24,7 +24,7 @@ export type Address = {
 
 export type Total = {
   distance: number
-  time: number
+  duration: number
   servicePrice: number
 }
 

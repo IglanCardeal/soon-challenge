@@ -7,6 +7,7 @@ import {
 
 export interface DeliveryDTO extends Omit<Delivery, 'lastAddress' | 'total'> {
   distanceFromCollectionAddress?: number
+  lastAddress?: Address
 }
 
 export interface CreateServiceRequestDTO {

@@ -1,5 +1,17 @@
-import { Address } from '../model/service-request'
+import { Address, ServiceRequest } from '../model/service-request'
 
-export interface CalculateDistanceProvider {
-  fromOriginToDestiny(origin: Address, destiny: Address): Promise<number>
+export type CalculateDistanceAndDurationProviderResponse = {
+  distance: number
+  duration: number
+}
+
+export interface CalculateDistanceAndDurationProvider {
+  fromOriginToDestiny(
+    origin: Address,
+    destiny: Address,
+  ): Promise<CalculateDistanceAndDurationProviderResponse>
+}
+
+export interface ServiceRequestRepository {
+  save(serviceRequest: Omit<ServiceRequest, 'id'>): Promise<ServiceRequest>
 }

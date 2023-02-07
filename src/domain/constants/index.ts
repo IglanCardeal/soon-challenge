@@ -1,16 +1,21 @@
-const pricePerKmForGuinchoInReais = 120 / 20
+const maxGuinchoKmForBasePrice = 120
+const pricePerKmForGuinchoInReais = maxGuinchoKmForBasePrice / 20
 const extraPricePerKmForGuinchoInReais = pricePerKmForGuinchoInReais + 1.37
-const pricePerKmForCegonhaInReais = 370 / 20
+
+const maxCegonhaKmForBasePrice = 370
+const pricePerKmForCegonhaInReais = maxCegonhaKmForBasePrice / 20
 const extraPricePerKmForCegonhaInReais = pricePerKmForGuinchoInReais + 5.33
 
 const pricePerKm = {
   guincho: {
+    maxGuinchoKmForBasePrice,
     km: pricePerKmForGuinchoInReais,
     extraKm: extraPricePerKmForGuinchoInReais,
   },
   cegonha: {
     km: pricePerKmForCegonhaInReais,
     extraKm: extraPricePerKmForCegonhaInReais,
+    maxCegonhaKmForBasePrice,
   },
 }
 const maxVehicles = {
