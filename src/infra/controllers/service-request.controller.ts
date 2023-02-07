@@ -13,19 +13,20 @@ import {
 import { logger } from '../logger'
 import { ControllerCreateRequestServiceDTO } from './dto/create-request-service-dto'
 import { createServiceRequestUseCaseFactory } from './factories'
+import { createRandomCompanyClient } from '../repository/utils'
+
+const createServiceRequestUseCase = createServiceRequestUseCaseFactory()
 
 @Controller('api/v1/service-request')
 export class AppController {
-  constructor(
-    private readonly createServiceRequestUseCase = createServiceRequestUseCaseFactory(),
-  ) {}
-
   @Post('create')
   async create(@Body() request: ControllerCreateRequestServiceDTO) {
     logger.log(request)
 
     try {
-      const result = await this.createServiceRequestUseCase.create(request)
+      await createRandomCompanyClient(request.company.name, request.company.id)
+
+      const result = await createServiceRequestUseCase.create(request)
 
       if (
         result instanceof InvalidVehiclesQtyError ||

@@ -3,11 +3,10 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 export async function createRandomCompanyClient(name: string, id: number) {
-  return await prisma.company.create({
-    data: {
-      name,
-      id,
-    },
+  return await prisma.company.upsert({
+    where: { id },
+    update: { name },
+    create: { name },
   })
 }
 

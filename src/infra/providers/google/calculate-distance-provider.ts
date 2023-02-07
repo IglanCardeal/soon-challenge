@@ -37,9 +37,15 @@ export class GoogleCalculateDistanceAndDurationProvider
       },
     ] = data.rows
 
+    const kmInMeters = 1000
+    const minuteInSeconds = 60
+
+    const floatDistance = +(result.distance.value / kmInMeters).toFixed(2)
+    const floatDuration = +(result.duration.value / minuteInSeconds).toFixed(2)
+
     return {
-      distance: result.distance.value,
-      duration: result.duration.value,
+      distance: floatDistance,
+      duration: floatDuration,
     }
   }
 }
