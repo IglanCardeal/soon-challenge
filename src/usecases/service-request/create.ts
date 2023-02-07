@@ -1,25 +1,21 @@
-import { DomainConstants } from 'src/domain/constants'
-import {
-  CalculateDistanceAndDurationProvider,
-  ServiceRequestRepository,
-} from 'src/domain/contracts'
 import {
   InvalidFinalAddressError,
   InvalidServiceType,
   InvalidVehiclesQtyError,
 } from 'src/domain/errors'
 import {
+  CreateServiceRequest,
+  CreateServiceRequestDTO,
+  DeliveryDTO,
   Address,
   Delivery,
   ServiceRequest,
   ServiceType,
   Total,
-} from 'src/domain/model/service-request'
-import { CreateServiceRequest } from 'src/domain/usecases/service-request/create'
-import {
-  CreateServiceRequestDTO,
-  DeliveryDTO,
-} from 'src/domain/usecases/service-request/create-dto'
+  CalculateDistanceAndDurationProvider,
+  ServiceRequestRepository,
+  DomainConstants,
+} from './create-contracts'
 
 export class CreateServiceRequestUseCase implements CreateServiceRequest {
   constructor(
