@@ -10,7 +10,6 @@ export class FindServiceRequestUseCase implements FindServiceRequest {
   ) {}
 
   async find(id: string): Promise<ServiceRequest | null> {
-    await this.findServiceRequestRepository.findById(id)
-    return {} as any
+    return await this.findServiceRequestRepository.findById(id)
   }
 }
