@@ -16,5 +16,6 @@ export async function findAllCompanyClients() {
 }
 
 export async function clearAllCompanyClients() {
+  await prisma.serviceRequest.deleteMany({})
   return await prisma.company.deleteMany({})
 }
