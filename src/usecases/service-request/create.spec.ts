@@ -6,6 +6,17 @@ import {
 import { CreateServiceRequestDTO } from 'src/domain/usecases/service-request/create-dto'
 import { DomainConstants } from 'src/domain/constants'
 import { CreateServiceRequestUseCase } from './create'
+import { CalculateDistanceProvider } from 'src/domain/contracts'
+import { Address } from 'src/domain/model/service-request'
+
+class CalculateDistanceProviderStub implements CalculateDistanceProvider {
+  async fromOriginToDestiny(
+    _origin: Address,
+    _destiny: Address,
+  ): Promise<number> {
+    return 0
+  }
+}
 
 const makeFakeDomainConstants = () => ({
   requestService: {
@@ -17,10 +28,13 @@ const makeFakeDomainConstants = () => ({
   },
 })
 const makeSut = () => {
+  const calculateDistanceProviderStub = new CalculateDistanceProviderStub()
   return {
     sut: new CreateServiceRequestUseCase(
       makeFakeDomainConstants() as DomainConstants,
+      calculateDistanceProviderStub,
     ),
+    calculateDistanceProviderStub,
   }
 }
 const makeFakeDto = (): CreateServiceRequestDTO => ({
@@ -50,8 +64,8 @@ const makeFakeDto = (): CreateServiceRequestDTO => ({
     },
     {
       finalAddress: {
-        lat: -58.7521,
-        long: -87.2162,
+        lat: -58.7523,
+        long: -87.2181,
       },
       vehicles: [
         {
@@ -67,7 +81,7 @@ const makeFakeDto = (): CreateServiceRequestDTO => ({
 
 describe('CreateServiceRequestUseCase', () => {
   let fakeDto: CreateServiceRequestDTO
-  const { sut } = makeSut()
+  const { sut, calculateDistanceProviderStub } = makeSut()
 
   beforeEach(() => {
     fakeDto = makeFakeDto()
@@ -142,5 +156,24 @@ describe('CreateServiceRequestUseCase', () => {
     fakeDto.deliveries[0].finalAddress = fakeDto.collectionAddress
     const result = await sut.create(fakeDto)
     expect(result).toEqual(new InvalidFinalAddressError('ABC-1234'))
+  })
+
+  it('Should call CalculateDistanceProvider with correct values', async () => {
+    const fromOriginToDestinySpy = jest.spyOn(
+      calculateDistanceProviderStub,
+      'fromOriginToDestiny',
+    )
+    await sut.create(fakeDto)
+    expect(fromOriginToDestinySpy).toBeCalledTimes(2)
+    expect(fromOriginToDestinySpy).toHaveBeenNthCalledWith(
+      1,
+      { lat: -58.6521, long: -87.1162 },
+      { lat: -58.7521, long: -87.2162 },
+    )
+    expect(fromOriginToDestinySpy).toHaveBeenNthCalledWith(
+      2,
+      { lat: -58.6521, long: -87.1162 },
+      { lat: -58.7523, long: -87.2181 },
+    )
   })
 })
