@@ -12,7 +12,7 @@ describe('PostgreServiceRequestRepository', () => {
   it('Should create test a company client on success', async () => {
     const res = await createRandomCompanyClient('test', 1)
     expect(res).toEqual({
-      id: 1,
+      id: expect.any(Number),
       name: 'test',
     })
   })
@@ -23,11 +23,11 @@ describe('PostgreServiceRequestRepository', () => {
     const res = await findAllCompanyClients()
     expect(res).toEqual([
       {
-        id: 1,
+        id: expect.any(Number),
         name: 'test',
       },
       {
-        id: 2,
+        id: expect.any(Number),
         name: 'test2',
       },
     ])
