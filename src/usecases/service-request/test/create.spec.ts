@@ -3,15 +3,18 @@ import {
   InvalidServiceType,
   InvalidVehiclesQtyError,
 } from 'src/domain/errors'
-import { CreateServiceRequestDTO } from 'src/domain/usecases/service-request/create-dto'
-import { DomainConstants } from 'src/domain/constants'
-import { CreateServiceRequestUseCase } from './create'
+import { CreateServiceRequestUseCase } from '../create'
 import {
+  CreateServiceRequestDTO,
+  Address,
+  ServiceRequest,
   CalculateDistanceAndDurationProvider,
-  CalculateDistanceAndDurationProviderResponse,
   ServiceRequestRepository,
-} from 'src/domain/contracts'
-import { Address, ServiceRequest } from 'src/domain/model/service-request'
+  DomainConstants,
+  CalculateDistanceAndDurationProviderResponse,
+} from '../create-contracts'
+import { makeFakeDomainConstants, makeFakeDto } from './fakers'
+import { expectedServiceRequest } from './expectations'
 
 class CalculateDistanceAndDurationProviderStub
   implements CalculateDistanceAndDurationProvider
@@ -35,27 +38,6 @@ class ServiceRequestRepositoryStub implements ServiceRequestRepository {
   }
 }
 
-const makeFakeDomainConstants = () => ({
-  requestService: {
-    maxVehicles: {
-      guincho: 2,
-      cegonha: 11,
-    },
-    pricePerKm: {
-      guincho: {
-        maxGuinchoKmForBasePrice: 4,
-        km: 5,
-        extraKm: 5 + 0.5,
-      },
-      cegonha: {
-        maxCegonhaKmForBasePrice: 4,
-        km: 10,
-        extraKm: 10 + 1.5,
-      },
-    },
-    validServiceTypes: ['guincho', 'cegonha'],
-  },
-})
 const makeSut = () => {
   const calculateDistanceAndDurationStub =
     new CalculateDistanceAndDurationProviderStub()
@@ -70,47 +52,6 @@ const makeSut = () => {
     serviceRequestRepositoryStub,
   }
 }
-const makeFakeDto = (): CreateServiceRequestDTO => ({
-  company: {
-    id: 'company_id',
-    name: 'Wells',
-  },
-  serviceType: 'guincho',
-  collectionAddress: {
-    lat: -58.6521,
-    long: -87.1162,
-  },
-  deliveries: [
-    {
-      finalAddress: {
-        lat: -58.7521,
-        long: -87.2162,
-      },
-      vehicles: [
-        {
-          brand: 'VW',
-          model: 'Gol',
-          year: '2015',
-          plate: 'ABC-1234',
-        },
-      ],
-    },
-    {
-      finalAddress: {
-        lat: -58.7523,
-        long: -87.2181,
-      },
-      vehicles: [
-        {
-          brand: 'Ford',
-          model: 'Wrangler',
-          year: '2012',
-          plate: 'CDE-1234',
-        },
-      ],
-    },
-  ],
-})
 
 describe('CreateServiceRequestUseCase', () => {
   let fakeDto: CreateServiceRequestDTO
@@ -129,7 +70,9 @@ describe('CreateServiceRequestUseCase', () => {
       ...fakeDto,
       serviceType: 'invalid' as any,
     })
-    expect(result).toBeInstanceOf(InvalidServiceType)
+    expect(result).toEqual(
+      new InvalidServiceType('invalid', ['guincho', 'cegonha']),
+    )
   })
 
   it('Should return InvalidVehiclesQtyError when no vehicles', async () => {
@@ -214,83 +157,6 @@ describe('CreateServiceRequestUseCase', () => {
   })
 
   it('Should call serviceRequestRepository with correct formated and ordered values', async () => {
-    const expectedServiceRequest = {
-      collectionAddress: {
-        lat: -58.6521,
-        long: -87.1162,
-      },
-      company: {
-        id: 'company_id',
-        name: 'Wells',
-      },
-      serviceType: 'guincho',
-      createdAt: expect.any(Date),
-      total: {
-        distance: 5,
-        duration: 4,
-        servicePrice: 25.5,
-      },
-      vehicles: [
-        {
-          brand: 'VW',
-          model: 'Gol',
-          year: '2015',
-          plate: 'ABC-1234',
-        },
-        {
-          brand: 'Ford',
-          model: 'Wrangler',
-          year: '2012',
-          plate: 'CDE-1234',
-        },
-      ],
-      deliveries: [
-        {
-          finalAddress: {
-            lat: -58.7523,
-            long: -87.2181,
-          },
-          lastAddress: {
-            lat: -58.6521,
-            long: -87.1162,
-          },
-          total: {
-            distance: 2,
-            duration: 2,
-          },
-          vehicles: [
-            {
-              brand: 'Ford',
-              model: 'Wrangler',
-              year: '2012',
-              plate: 'CDE-1234',
-            },
-          ],
-        },
-        {
-          finalAddress: {
-            lat: -58.7521,
-            long: -87.2162,
-          },
-          lastAddress: {
-            lat: -58.7523,
-            long: -87.2181,
-          },
-          total: {
-            distance: 3,
-            duration: 2,
-          },
-          vehicles: [
-            {
-              brand: 'VW',
-              model: 'Gol',
-              year: '2015',
-              plate: 'ABC-1234',
-            },
-          ],
-        },
-      ],
-    }
     const fromOriginToDestinySpy = jest.spyOn(
       calculateDistanceAndDurationStub,
       'fromOriginToDestiny',
@@ -314,7 +180,6 @@ describe('CreateServiceRequestUseCase', () => {
       })
     const saveSpy = jest.spyOn(serviceRequestRepositoryStub, 'save')
     await sut.create(fakeDto)
-    expect(saveSpy).toHaveBeenCalled()
     expect(saveSpy).toHaveBeenCalledWith(expectedServiceRequest)
   })
 })
