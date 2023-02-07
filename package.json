@@ -72,6 +72,7 @@
       "src/(.*)": "<rootDir>/$1"
     },
     "testRegex": ".*\\.spec\\.ts$",
+    "displayName": "unit-tests",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
     },
