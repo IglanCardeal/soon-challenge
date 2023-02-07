@@ -49,11 +49,15 @@ export class CreateServiceRequestUseCase implements CreateServiceRequest {
       return new InvalidServiceType(serviceType, validServiceTypes)
     }
 
-    if (this.checkVehiclesQtyForGuincho(serviceType, vehicles, guincho)) {
+    if (
+      this.checkInvalidVehiclesQtyForGuincho(serviceType, vehicles, guincho)
+    ) {
       return this.invalidVehiclesQtyErrorFactory(serviceType, guincho)
     }
 
-    if (this.checkVehiclesQtyForCegonha(serviceType, vehicles, cegonha)) {
+    if (
+      this.checkInvalidVehiclesQtyForCegonha(serviceType, vehicles, cegonha)
+    ) {
       return this.invalidVehiclesQtyErrorFactory(serviceType, cegonha)
     }
 
@@ -67,7 +71,7 @@ export class CreateServiceRequestUseCase implements CreateServiceRequest {
     return deliveries.find((vel) => vel.finalAddress === collectionAddress)
   }
 
-  private checkVehiclesQtyForGuincho(
+  private checkInvalidVehiclesQtyForGuincho(
     serviceType: string,
     vehicles: any[],
     maxVehicles: number,
@@ -75,7 +79,7 @@ export class CreateServiceRequestUseCase implements CreateServiceRequest {
     return serviceType === 'guincho' && vehicles.length > maxVehicles
   }
 
-  private checkVehiclesQtyForCegonha(
+  private checkInvalidVehiclesQtyForCegonha(
     serviceType: string,
     vehicles: any[],
     maxVehicles: number,
