@@ -33,30 +33,34 @@ const makeFakeDto = (): CreateServiceRequestDTO => ({
     lat: -58.6521,
     long: -87.1162,
   },
-  vehicles: [
+  deliveries: [
     {
-      brand: 'VW',
-      model: 'Gol',
-      year: '2015',
-      plate: 'ABC-1234',
-      delivery: {
-        finalAddress: {
-          lat: -58.7521,
-          long: -87.2162,
-        },
+      finalAddress: {
+        lat: -58.7521,
+        long: -87.2162,
       },
+      vehicles: [
+        {
+          brand: 'VW',
+          model: 'Gol',
+          year: '2015',
+          plate: 'ABC-1234',
+        },
+      ],
     },
     {
-      brand: 'Ford',
-      model: 'Wrangler',
-      year: '2012',
-      plate: 'CDE-1234',
-      delivery: {
-        finalAddress: {
-          lat: -58.7521,
-          long: -87.2162,
-        },
+      finalAddress: {
+        lat: -58.7521,
+        long: -87.2162,
       },
+      vehicles: [
+        {
+          brand: 'Ford',
+          model: 'Wrangler',
+          year: '2012',
+          plate: 'CDE-1234',
+        },
+      ],
     },
   ],
 })
@@ -78,7 +82,24 @@ describe('CreateServiceRequestUseCase', () => {
   })
 
   it('Should return InvalidVehiclesQtyError when no vehicles', async () => {
-    fakeDto.vehicles = []
+    fakeDto.deliveries = fakeDto.deliveries.map((del) => ({
+      ...del,
+      vehicles: [],
+    }))
+    const result = await sut.create(fakeDto)
+    expect(result).toEqual(
+      new InvalidVehiclesQtyError('Invalid vehicle quantity 0.'),
+    )
+  })
+
+  it('Should return InvalidVehiclesQtyError when one delivery without vehicles', async () => {
+    fakeDto.deliveries[1] = {
+      finalAddress: {
+        lat: -58.7521,
+        long: -87.2162,
+      },
+      vehicles: [],
+    }
     const result = await sut.create(fakeDto)
     expect(result).toEqual(
       new InvalidVehiclesQtyError('Invalid vehicle quantity 0.'),
@@ -86,17 +107,11 @@ describe('CreateServiceRequestUseCase', () => {
   })
 
   it('Should return InvalidVehiclesQtyError when more than 2 vehicles for a service type "guincho"', async () => {
-    fakeDto.vehicles.push({
+    fakeDto.deliveries[0].vehicles.push({
       brand: 'Ford',
       model: 'Wrangler',
       year: '2015',
       plate: 'ZXW-1234',
-      delivery: {
-        finalAddress: {
-          lat: -58.7521,
-          long: -87.2162,
-        },
-      },
     })
     const result = await sut.create(fakeDto)
     expect(result).toEqual(
@@ -108,18 +123,12 @@ describe('CreateServiceRequestUseCase', () => {
 
   it('Should return InvalidVehiclesQtyError when more than 11 vehicles for a service type "cegonha"', async () => {
     fakeDto.serviceType = 'cegonha'
-    fakeDto.vehicles.length = 12
-    fakeDto.vehicles.fill({
+    fakeDto.deliveries[0].vehicles.length = 12
+    fakeDto.deliveries[0].vehicles.fill({
       brand: 'Ford',
       model: 'Wrangler',
       year: '2015',
       plate: 'ZXW-1234',
-      delivery: {
-        finalAddress: {
-          lat: -58.7521,
-          long: -87.2162,
-        },
-      },
     })
     const result = await sut.create(fakeDto)
     expect(result).toEqual(
@@ -130,7 +139,7 @@ describe('CreateServiceRequestUseCase', () => {
   })
 
   it('Should return InvalidFinalAddressError if one of the vehicles has the final address equals to the collection address', async () => {
-    fakeDto.vehicles[0].delivery.finalAddress = fakeDto.collectionAddress
+    fakeDto.deliveries[0].finalAddress = fakeDto.collectionAddress
     const result = await sut.create(fakeDto)
     expect(result).toEqual(new InvalidFinalAddressError('ABC-1234'))
   })
