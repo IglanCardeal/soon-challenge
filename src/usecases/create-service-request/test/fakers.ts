@@ -1,4 +1,4 @@
-import { CreateServiceRequestDTO } from 'src/domain/usecases/service-request/create-dto'
+import { CreateServiceRequestDTO } from 'src/domain/usecases/create-service-request/create-dto'
 
 const makeFakeDomainConstants = () => ({
   requestService: {

@@ -1,5 +1,0 @@
-export * from 'src/domain/constants'
-export * from 'src/domain/contracts'
-export * from 'src/domain/model/service-request'
-export * from 'src/domain/usecases/service-request/create'
-export * from 'src/domain/usecases/service-request/create-dto'
