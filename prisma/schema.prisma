@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -8,4 +5,22 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+model Company {
+  id             String           @id @default(uuid())
+  name           String
+  ServiceRequest ServiceRequest[]
+}
+
+model ServiceRequest {
+  id                String   @id @default(uuid())
+  serviceType       String
+  createdAt         DateTime
+  total             Json
+  collectionAddress Json
+  deliveries        Json
+  vehicles          Json
+  company           Company  @relation(references: [id], fields: [companyId])
+  companyId         String
 }
