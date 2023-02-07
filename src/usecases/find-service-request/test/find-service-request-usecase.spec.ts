@@ -1,9 +1,9 @@
 import {
   FindServiceRequestRepository,
   ServiceRequest,
-} from './find-service-request-contracts'
+} from '../find-service-request-contracts'
 import { expectedServiceRequest } from './expectations'
-import { FindServiceRequestUseCase } from './find-service-request-usecase'
+import { FindServiceRequestUseCase } from '../find-service-request-usecase'
 
 class FindServiceRequestRepositoryStub implements FindServiceRequestRepository {
   async findById(id: string): Promise<ServiceRequest | null> {
