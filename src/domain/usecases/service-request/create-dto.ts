@@ -5,7 +5,9 @@ import {
   ServiceType,
 } from 'src/domain/model/service-request'
 
-export type DeliveryDTO = Omit<Delivery, 'lastAddress' | 'total'>
+export interface DeliveryDTO extends Omit<Delivery, 'lastAddress' | 'total'> {
+  distanceFromCollectionAddress?: number
+}
 
 export interface CreateServiceRequestDTO {
   company: Company

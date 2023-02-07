@@ -1,4 +1,5 @@
 import { DomainConstants } from 'src/domain/constants'
+import { CalculateDistanceProvider } from 'src/domain/contracts'
 import {
   InvalidFinalAddressError,
   InvalidServiceType,
@@ -12,7 +13,10 @@ import {
 } from 'src/domain/usecases/service-request/create-dto'
 
 export class CreateServiceRequestUseCase implements CreateServiceRequest {
-  constructor(private readonly domainConstants: DomainConstants) {}
+  constructor(
+    private readonly domainConstants: DomainConstants,
+    private readonly calculateDistanceProvider: CalculateDistanceProvider,
+  ) {}
 
   async create(
     data: CreateServiceRequestDTO,
@@ -59,6 +63,14 @@ export class CreateServiceRequestUseCase implements CreateServiceRequest {
       this.checkInvalidVehiclesQtyForCegonha(serviceType, vehicles, cegonha)
     ) {
       return this.invalidVehiclesQtyErrorFactory(serviceType, cegonha)
+    }
+
+    for (const delivery of deliveries) {
+      delivery.distanceFromCollectionAddress =
+        await this.calculateDistanceProvider.fromOriginToDestiny(
+          collectionAddress,
+          delivery.finalAddress,
+        )
     }
 
     return {} as any
