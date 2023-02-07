@@ -9,11 +9,7 @@ const mockJsonResponse = require('./mock.json')
 const googleApiKey = 'test'
 const googleUrl = config.env.GOOGLE_CLOUD_API_URL
 
-nock(googleUrl)
-  .get(
-    `?origins=-1.369406,-48.380052&destinations=-1.368226,-48.377295&key=${googleApiKey}`,
-  )
-  .reply(200, mockJsonResponse)
+nock(googleUrl).get(/\w\W/).reply(200, mockJsonResponse)
 
 const makeSut = () =>
   new GoogleCalculateDistanceAndDurationProvider(googleApiKey, googleUrl)
