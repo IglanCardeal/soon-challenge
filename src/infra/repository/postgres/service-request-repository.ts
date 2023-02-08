@@ -1,14 +1,19 @@
 import { PrismaClient } from '@prisma/client'
 import {
+  FindCompanyServicesRepository,
   FindServiceRequestRepository,
   ServiceRequestRepository,
 } from 'src/domain/contracts'
 import { ServiceRequest } from 'src/domain/model/service-request'
+import { FindCompanyServicesDTO } from 'src/usecases/find-company-services/find-company-services-contracts'
 
 const prisma = new PrismaClient()
 
 export class PostgreServiceRequestRepository
-  implements ServiceRequestRepository, FindServiceRequestRepository
+  implements
+    ServiceRequestRepository,
+    FindServiceRequestRepository,
+    FindCompanyServicesRepository
 {
   async save(
     serviceRequest: Omit<ServiceRequest, 'id'>,
@@ -58,5 +63,14 @@ export class PostgreServiceRequestRepository
       vehicles: resp.vehicles,
       company: resp.company,
     } as any
+  }
+
+  async findByCompanyId(
+    data: FindCompanyServicesDTO,
+  ): Promise<ServiceRequest[]> {
+    const { companyId, endDate, startDate } = data
+    const res =
+      await prisma.$queryRaw`SELECT * FROM "ServiceRequest" WHERE "companyId" = ${companyId} AND "createdAt" BETWEEN ${startDate} AND ${endDate}`
+    return res as ServiceRequest[]
   }
 }
