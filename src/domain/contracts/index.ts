@@ -1,5 +1,5 @@
 import { Address, ServiceRequest } from '../model/service-request'
-import { FindCompanyServicesDTO } from '../usecases/find-company-services-/find-dto'
+import { FindCompanyServicesDTO } from '../usecases/find-company-services/find-dto'
 
 export type CalculateDistanceAndDurationProviderResponse = {
   distance: number
