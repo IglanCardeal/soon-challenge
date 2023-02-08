@@ -69,8 +69,13 @@ export class PostgreServiceRequestRepository
     data: FindCompanyServicesDTO,
   ): Promise<ServiceRequest[]> {
     const { companyId, endDate, startDate } = data
-    const res =
+    const res: any[] =
       await prisma.$queryRaw`SELECT * FROM "ServiceRequest" WHERE "companyId" = ${companyId} AND "createdAt" BETWEEN ${startDate} AND ${endDate}`
+
+    for (let index = 0; index < res.length; index++) {
+      res[index].deliveries = JSON.parse(res[index].deliveries)
+    }
+
     return res as ServiceRequest[]
   }
 }
