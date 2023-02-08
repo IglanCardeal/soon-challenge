@@ -9,7 +9,7 @@ class FindCompanyServicesRepositoryStub
   implements FindCompanyServicesRepository
 {
   async findById(_data: FindCompanyServicesDTO): Promise<ServiceRequest[]> {
-    return [makeFakeServiceData()]
+    return [...makeFakeServiceData()]
   }
 }
 
@@ -64,5 +64,16 @@ describe('FindCompanyServicesUseCase', () => {
       endDate: invalidDate,
     })
     expect(result).toEqual(new InvalidStarAndEndDateError())
+  })
+
+  it('Should return all the services data on success', async () => {
+    const result = await sut.find(payload)
+    expect(result).toEqual({
+      services: expect.any(Array),
+      total: {
+        count: 2,
+        fullPrice: 75.5,
+      },
+    })
   })
 })
