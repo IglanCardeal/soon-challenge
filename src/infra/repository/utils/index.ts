@@ -1,6 +1,35 @@
 import { PrismaClient } from '@prisma/client'
+import { logger } from 'src/infra/logger'
 
 const prisma = new PrismaClient()
+
+const clients = [
+  {
+    id: 1,
+    name: 'Teste',
+  },
+  {
+    id: 1,
+    name: 'Teste3',
+  },
+  {
+    id: 1,
+    name: 'Teste3',
+  },
+]
+
+const feedClientsTables = async () => {
+  const promises = clients.map(({ id, name }) =>
+    createRandomCompanyClient(name, id),
+  )
+
+  await Promise.all(promises)
+
+  logger.log('\n==================INFO==================\n')
+  logger.warn('[DB Restart]: New clients created. Use one of these: ')
+  logger.warn(JSON.stringify(clients))
+  logger.log('\n========================================\n')
+}
 
 export async function createRandomCompanyClient(name: string, id: number) {
   return await prisma.company.upsert({
@@ -17,4 +46,17 @@ export async function findAllCompanyClients() {
 export async function clearAllCompanyClients() {
   await prisma.serviceRequest.deleteMany({})
   return await prisma.company.deleteMany({})
+}
+
+export async function setupClientRandomData() {
+  const clients = await findAllCompanyClients()
+
+  if (clients.length) {
+    logger.warn('[DB Restart]: Clients saved: ')
+    logger.warn(JSON.stringify(clients))
+    return
+  }
+
+  await clearAllCompanyClients()
+  await feedClientsTables()
 }
