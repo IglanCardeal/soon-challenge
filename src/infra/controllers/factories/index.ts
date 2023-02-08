@@ -1,4 +1,5 @@
 import { CreateServiceRequest } from 'src/domain/usecases/create-service-request/create'
+import { FindCompanyServices } from 'src/domain/usecases/find-company-services/find'
 import { domainConstants } from '../../../domain/constants'
 import { CreateServiceRequestUseCase } from 'src/usecases/create-service-request/create-service-request-usecase'
 import { config } from 'src/infra/config'
@@ -6,6 +7,7 @@ import { GoogleCalculateDistanceAndDurationProvider } from 'src/infra/providers/
 import { PostgreServiceRequestRepository } from 'src/infra/repository/postgres/service-request-repository'
 import { FindServiceRequest } from 'src/usecases/find-service-request/find-service-request-contracts'
 import { FindServiceRequestUseCase } from 'src/usecases/find-service-request/find-service-request-usecase'
+import { FindCompanyServicesUseCase } from 'src/usecases/find-company-services/find-company-services-usecase'
 
 export const googleCalculateDistanceAndDurationProviderFactory = () => {
   const googleApiKey = config.env.GOOGLE_CLOUD_API_KEY
@@ -25,4 +27,8 @@ export const createServiceRequestUseCaseFactory = (): CreateServiceRequest => {
 
 export const findServiceRequestUseCaseFactory = (): FindServiceRequest => {
   return new FindServiceRequestUseCase(postgreServiceRequestRepository)
+}
+
+export const findCompanyServicesUseCaseFactory = (): FindCompanyServices => {
+  return new FindCompanyServicesUseCase(postgreServiceRequestRepository)
 }
