@@ -6,7 +6,6 @@ import {
   IsDefined,
   IsString,
   ValidateNested,
-  IsDateString,
 } from 'class-validator'
 
 import { Type } from 'class-transformer'
@@ -74,24 +73,4 @@ export class ControllerCreateRequestServiceDTO {
   @ValidateNested()
   @Type(() => Delivery)
   deliveries: Delivery[]
-}
-
-export class FindParamsDTO {
-  @IsString()
-  @IsNotEmpty()
-  id: string
-}
-
-export class FindByCompanyParamsDTO {
-  @IsDefined()
-  @IsNumber()
-  companyId: number
-
-  @IsDefined()
-  @IsDateString()
-  startDate: Date
-
-  @IsDefined()
-  @IsDateString()
-  endDate: Date
 }
