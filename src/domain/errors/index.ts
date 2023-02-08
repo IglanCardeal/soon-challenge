@@ -19,3 +19,10 @@ export class InvalidFinalAddressError extends Error {
     this.message = `The vehicle with the plate ${plate} has the final address equal to the collection address`
   }
 }
+
+export class InvalidStarAndEndDateError extends Error {
+  constructor() {
+    super('InvalidStarAndEndDateError')
+    this.message = `The start and end date are invalid`
+  }
+}

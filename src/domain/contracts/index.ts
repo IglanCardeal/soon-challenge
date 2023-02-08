@@ -1,4 +1,5 @@
 import { Address, ServiceRequest } from '../model/service-request'
+import { FindCompanyServicesDTO } from '../usecases/find-company-services-/find-dto'
 
 export type CalculateDistanceAndDurationProviderResponse = {
   distance: number
@@ -21,5 +22,5 @@ export interface FindServiceRequestRepository {
 }
 
 export interface FindCompanyServicesRepository {
-  findById(companyId: number): Promise<ServiceRequest[]>
+  findById(data: FindCompanyServicesDTO): Promise<ServiceRequest[]>
 }

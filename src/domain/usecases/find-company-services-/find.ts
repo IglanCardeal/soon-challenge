@@ -1,8 +1,10 @@
+import { InvalidStarAndEndDateError } from 'src/domain/errors'
 import { ServiceRequest } from 'src/domain/model/service-request'
+import { FindCompanyServicesDTO } from './find-dto'
 
 export type TotalOfServices = {
-  open: number
-  value: number
+  count: number
+  fullPrice: number
 }
 
 export interface CompanyServices {
@@ -11,5 +13,7 @@ export interface CompanyServices {
 }
 
 export interface FindCompanyServices {
-  find(id: number): Promise<CompanyServices>
+  find(
+    data: FindCompanyServicesDTO,
+  ): Promise<CompanyServices | InvalidStarAndEndDateError>
 }
