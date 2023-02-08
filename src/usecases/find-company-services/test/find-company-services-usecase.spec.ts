@@ -32,4 +32,11 @@ describe('FindCompanyServicesUseCase', () => {
     await sut.find(companyId)
     expect(findByIdSpy).toHaveBeenCalledWith(1)
   })
+
+  it('Should throw if FindCompanyServicesRepository throws', async () => {
+    jest
+      .spyOn(findCompanyServicesRepositoryStub, 'findById')
+      .mockRejectedValueOnce(new Error())
+    await expect(sut.find(companyId)).rejects.toThrow(new Error())
+  })
 })
