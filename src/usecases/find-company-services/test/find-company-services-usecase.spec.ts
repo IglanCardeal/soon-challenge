@@ -10,7 +10,9 @@ import { makeFakeServiceData } from './fakers'
 class FindCompanyServicesRepositoryStub
   implements FindCompanyServicesRepository
 {
-  async findById(_data: FindCompanyServicesDTO): Promise<ServiceRequest[]> {
+  async findByCompanyId(
+    _data: FindCompanyServicesDTO,
+  ): Promise<ServiceRequest[]> {
     return [...makeFakeServiceData()]
   }
 }
@@ -41,7 +43,7 @@ describe('FindCompanyServicesUseCase', () => {
   it('Should call FindCompanyServicesRepository with correct company id', async () => {
     const findByIdSpy = jest.spyOn(
       findCompanyServicesRepositoryStub,
-      'findById',
+      'findByCompanyId',
     )
     await sut.find(payload)
     expect(findByIdSpy).toHaveBeenCalledWith({
@@ -53,7 +55,7 @@ describe('FindCompanyServicesUseCase', () => {
 
   it('Should throw if FindCompanyServicesRepository throws', async () => {
     jest
-      .spyOn(findCompanyServicesRepositoryStub, 'findById')
+      .spyOn(findCompanyServicesRepositoryStub, 'findByCompanyId')
       .mockRejectedValueOnce(new Error())
     await expect(sut.find(payload)).rejects.toThrow(new Error())
   })

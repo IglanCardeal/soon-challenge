@@ -22,5 +22,5 @@ export interface FindServiceRequestRepository {
 }
 
 export interface FindCompanyServicesRepository {
-  findById(data: FindCompanyServicesDTO): Promise<ServiceRequest[]>
+  findByCompanyId(data: FindCompanyServicesDTO): Promise<ServiceRequest[]>
 }
