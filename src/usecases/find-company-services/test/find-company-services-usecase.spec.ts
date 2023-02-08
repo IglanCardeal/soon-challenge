@@ -1,7 +1,9 @@
-import { FindCompanyServicesRepository } from 'src/domain/contracts'
 import { InvalidStarAndEndDateError } from 'src/domain/errors'
-import { ServiceRequest } from 'src/domain/model/service-request'
-import { FindCompanyServicesDTO } from 'src/domain/usecases/find-company-services-/find-dto'
+import {
+  FindCompanyServicesDTO,
+  ServiceRequest,
+  FindCompanyServicesRepository,
+} from '../find-company-services-contracts'
 import { FindCompanyServicesUseCase } from '../find-company-services-usecase'
 import { makeFakeServiceData } from './fakers'
 

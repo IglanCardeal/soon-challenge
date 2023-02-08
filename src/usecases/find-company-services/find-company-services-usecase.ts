@@ -2,8 +2,8 @@ import { InvalidStarAndEndDateError } from 'src/domain/errors'
 import {
   CompanyServices,
   FindCompanyServices,
-} from 'src/domain/usecases/find-company-services-/find'
-import { FindCompanyServicesDTO } from 'src/domain/usecases/find-company-services-/find-dto'
+  FindCompanyServicesDTO,
+} from './find-company-services-contracts'
 import { FindCompanyServicesRepository } from '../create-service-request/create-service-request-contracts'
 
 export class FindCompanyServicesUseCase implements FindCompanyServices {
