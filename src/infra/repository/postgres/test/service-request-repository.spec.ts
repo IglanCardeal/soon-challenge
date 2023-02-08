@@ -35,7 +35,12 @@ describe('PostgreServiceRequestRepository', () => {
     }
     await sut.save(await makeFakeServiceRequest())
     const result = await sut.findByCompanyId(payload)
-    expect(result.length).toBe(1)
+    expect(result).toEqual({
+      count: expect.any(Number),
+      totalPrice: expect.any(Number),
+    })
+    expect(result.count).toBeGreaterThan(0)
+    expect(result.totalPrice).toBeGreaterThan(0)
   })
 
   it('Should return an empty result for the dates', async () => {
@@ -50,6 +55,9 @@ describe('PostgreServiceRequestRepository', () => {
     }
     await sut.save(await makeFakeServiceRequest())
     const result = await sut.findByCompanyId(payload)
-    expect(result.length).toBe(0)
+    expect(result).toEqual({
+      totalPrice: 0,
+      count: 0,
+    })
   })
 })

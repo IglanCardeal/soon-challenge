@@ -1,19 +1,21 @@
 import { InvalidStarAndEndDateError } from 'src/domain/errors'
 import {
   FindCompanyServicesDTO,
-  ServiceRequest,
   FindCompanyServicesRepository,
+  FindCompanyServicesRepositoryResponse,
 } from '../find-company-services-contracts'
 import { FindCompanyServicesUseCase } from '../find-company-services-usecase'
-import { makeFakeServiceData } from './fakers'
 
 class FindCompanyServicesRepositoryStub
   implements FindCompanyServicesRepository
 {
   async findByCompanyId(
     _data: FindCompanyServicesDTO,
-  ): Promise<ServiceRequest[]> {
-    return [...makeFakeServiceData()]
+  ): Promise<FindCompanyServicesRepositoryResponse> {
+    return {
+      count: 1,
+      totalPrice: 1,
+    }
   }
 }
 
@@ -73,10 +75,9 @@ describe('FindCompanyServicesUseCase', () => {
   it('Should return all the services data on success', async () => {
     const result = await sut.find(payload)
     expect(result).toEqual({
-      services: expect.any(Array),
       total: {
-        count: 2,
-        fullPrice: 75.5,
+        count: 1,
+        fullPrice: 1,
       },
     })
   })
