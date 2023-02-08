@@ -21,6 +21,6 @@ model ServiceRequest {
   collectionAddress Json
   deliveries        Json
   vehicles          Json
-  company           Company  @relation(references: [id], fields: [companyId])
+  company           Company  @relation(references: [id], fields: [companyId], onDelete: Cascade)
   companyId         Int
 }
