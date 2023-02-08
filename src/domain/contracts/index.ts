@@ -19,3 +19,7 @@ export interface ServiceRequestRepository {
 export interface FindServiceRequestRepository {
   findById(id: string): Promise<ServiceRequest | null>
 }
+
+export interface FindCompanyServicesRepository {
+  findById(companyId: number): Promise<ServiceRequest[]>
+}
