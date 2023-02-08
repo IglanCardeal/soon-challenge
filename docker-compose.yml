@@ -1,14 +1,38 @@
-version: '3.9'
-
+version: '3'
 services:
-  prisma-postgres-dev:
-    container_name: integration-dev-prisma
-    image: postgres
-    ports:
-      - '5433:5432'
+  api:
+    container_name: soon-api-container
+    image: node:16
+    working_dir: /usr/app
+    build: path
+    env_file:
+      - ./.env
     environment:
-      POSTGRES_USER: prisma
+      - DATABASE_URL=postgresql://prisma:prisma@postgres:5432/dev
+    command: bash -c "sleep 5 && npm i && npm run start:dev"
+    volumes:
+      - ./:/usr/app/
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+    networks:
+      - soon_network
+      
+  postgres:
+    container_name: soon-postgres-container
+    image: postgres
+    environment:
       POSTGRES_PASSWORD: prisma
       POSTGRES_DB: dev
+      POSTGRES_USER: prisma
+    ports:
+      - "5432:5432"
+    networks:
+      - soon_network
     volumes:
       - ./postgres-data:/var/lib/postgresql/data
+
+networks:
+  soon_network:
+    driver: bridge
