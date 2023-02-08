@@ -1,0 +1,19 @@
+version: '3'
+services:
+  postgres:
+    container_name: soon-postgres-container
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: prisma
+      POSTGRES_DB: dev
+      POSTGRES_USER: prisma
+    ports:
+      - "5432:5432"
+    networks:
+      - soon_network
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+
+networks:
+  soon_network:
+    driver: bridge
