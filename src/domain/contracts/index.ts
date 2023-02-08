@@ -21,6 +21,13 @@ export interface FindServiceRequestRepository {
   findById(id: string): Promise<ServiceRequest | null>
 }
 
+export type FindCompanyServicesRepositoryResponse = {
+  count: number
+  totalPrice: number
+}
+
 export interface FindCompanyServicesRepository {
-  findByCompanyId(data: FindCompanyServicesDTO): Promise<ServiceRequest[]>
+  findByCompanyId(
+    data: FindCompanyServicesDTO,
+  ): Promise<FindCompanyServicesRepositoryResponse>
 }

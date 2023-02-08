@@ -22,20 +22,16 @@ export class FindCompanyServicesUseCase implements FindCompanyServices {
       return new InvalidStarAndEndDateError()
     }
 
-    const services = await this.findServiceRequestRepository.findByCompanyId({
+    const result = await this.findServiceRequestRepository.findByCompanyId({
       companyId,
       startDate,
       endDate,
     })
 
     return {
-      services,
       total: {
-        count: services.length,
-        fullPrice: services.reduce(
-          (prev, act) => prev + act.total.servicePrice,
-          0,
-        ),
+        count: result.count,
+        fullPrice: result.totalPrice,
       },
     }
   }

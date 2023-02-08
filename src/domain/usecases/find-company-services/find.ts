@@ -1,5 +1,4 @@
 import { InvalidStarAndEndDateError } from 'src/domain/errors'
-import { ServiceRequest } from 'src/domain/model/service-request'
 import { FindCompanyServicesDTO } from './find-dto'
 
 export type TotalOfServices = {
@@ -8,7 +7,6 @@ export type TotalOfServices = {
 }
 
 export interface CompanyServices {
-  services: ServiceRequest[]
   total: TotalOfServices
 }
 

@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 import {
   FindCompanyServicesRepository,
+  FindCompanyServicesRepositoryResponse,
   FindServiceRequestRepository,
   ServiceRequestRepository,
 } from 'src/domain/contracts'
@@ -51,6 +52,7 @@ export class PostgreServiceRequestRepository
         company: true,
       },
     })
+
     if (!resp) return null
 
     return {
@@ -67,15 +69,23 @@ export class PostgreServiceRequestRepository
 
   async findByCompanyId(
     data: FindCompanyServicesDTO,
-  ): Promise<ServiceRequest[]> {
+  ): Promise<FindCompanyServicesRepositoryResponse> {
     const { companyId, endDate, startDate } = data
-    const res: any[] =
-      await prisma.$queryRaw`SELECT * FROM "ServiceRequest" WHERE "companyId" = ${companyId} AND "createdAt" BETWEEN ${startDate} AND ${endDate}`
 
-    for (let index = 0; index < res.length; index++) {
-      res[index].deliveries = JSON.parse(res[index].deliveries)
+    const sql = `
+      SELECT 
+        count(*)::numeric AS count,
+        sum(("total"->'servicePrice')::numeric) as price
+      FROM "ServiceRequest" WHERE "companyId" = ${companyId}
+        AND "createdAt" BETWEEN 
+          '${startDate.toISOString()}' AND '${endDate.toISOString()}'
+      `
+
+    const [res]: any = await prisma.$queryRawUnsafe(sql)
+
+    return {
+      totalPrice: +res.price || 0,
+      count: +res.count || 0,
     }
-
-    return res as ServiceRequest[]
   }
 }
