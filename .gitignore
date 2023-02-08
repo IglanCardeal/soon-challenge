@@ -3,6 +3,7 @@
 /node_modules
 
 postgres-data
+/prisma/migrations
 
 # env
 .env
