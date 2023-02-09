@@ -3,7 +3,7 @@ import { logger } from 'src/infra/logger'
 
 const prisma = new PrismaClient()
 
-const clients = [
+const clientsToCreate = [
   {
     id: 1,
     name: 'Teste',
@@ -19,7 +19,7 @@ const clients = [
 ]
 
 const feedClientsTables = async () => {
-  const promises = clients.map(({ id, name }) =>
+  const promises = clientsToCreate.map(({ id, name }) =>
     createRandomCompanyClient(name, id),
   )
 
@@ -27,7 +27,7 @@ const feedClientsTables = async () => {
 
   logger.log('\n==================INFO==================\n')
   logger.warn('[DB Restart]: New clients created. Use one of these: ')
-  logger.warn(JSON.stringify(clients))
+  logger.warn(JSON.stringify(clientsToCreate))
   logger.log('\n========================================\n')
 }
 
@@ -53,7 +53,7 @@ export async function setupClientRandomData() {
 
   if (clients.length) {
     logger.warn('[DB Restart]: Clients saved: ')
-    logger.warn(JSON.stringify(clients))
+    logger.warn(JSON.stringify(clientsToCreate))
     return
   }
 
