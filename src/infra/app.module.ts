@@ -4,6 +4,7 @@ import {
   CreateServiceController,
   FindServiceRequestController,
 } from './controllers'
+import { PingTestController } from './controllers/ping/ping-test.controller'
 
 @Module({
   imports: [],
@@ -11,6 +12,7 @@ import {
     FindCompanyServicesController,
     CreateServiceController,
     FindServiceRequestController,
+    PingTestController,
   ],
   providers: [],
 })
