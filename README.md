@@ -57,37 +57,15 @@ $ npm run up
 
 Ele vai executar alguns scripts para subir o container do Postgres, fazer os devidos ajustes do Prisma com o banco de dados e subir o container do servidor.
 
+---
+
 Caso queira encerrar os containers, basta executar:
 
 ```bash
 $ npm run down
 ```
 
-- #### Alerta do Prisma
-
-- Uma vez criado e ajustado o banco de dados durante a primeira execução, o prisma pode exibir um alerta como o mostrado abaixo, mas não se preocupe, pois uma vez criado as tabelas do banco durante a primeira inicialização, não há necessidade de executar o comando novamente. Aperte a tecla <kbd>N</kbd> para continuar normalmente.
-
-```bash
-- Drift detected: Your database schema is not in sync with your migration history.
-
-The following is a summary of the differences between the expected database schema given your migrations files, and the actual schema of the database.
-
-It should be understood as the set of changes to get from the expected schema to the actual schema.
-
-[+] Added tables
-  - Company
-  - ServiceRequest
-
-[*] Changed the `ServiceRequest` table
-  [+] Added foreign key on columns (companyId)
-
-- The following migration(s) are applied to the database but missing from the local migrations directory: 20230208185234_init
-
-✔ We need to reset the "public" schema at "0.0.0.0:5432"
-Do you want to continue? All data will be lost.
-```
-
-- Se você optar por refazer a base de dados, aperte a tecla <kbd>Y</kbd>, mas tenha em mente que todos os dados existentes serão apagados.
+---
 
 Agora teste a aplicação acessando a rota `http://localhost:3000/ping` (a porta padrão do servidor é `3000`) para fazer um teste da aplicação. Execute o cURL abaixo:
 
