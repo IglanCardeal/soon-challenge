@@ -57,6 +57,35 @@ $ npm run up
 
 Ele vai executar alguns scripts para subir o container do Postgres, fazer os devidos ajustes do Prisma com o banco de dados e subir o container do servidor.
 
+Se você visualizar os logs do container da aplicação, deve aparecer algo como:
+
+```bash
+[Nest] 201  - 02/09/2023, 8:27:59 PM     LOG [NestFactory] Starting Nest application...
+[Nest] 201  - 02/09/2023, 8:27:59 PM     LOG [InstanceLoader] AppModule dependencies initialized +36ms
+[Nest] 201  - 02/09/2023, 8:28:00 PM     LOG
+==================INFO==================
+
+[Nest] 201  - 02/09/2023, 8:28:00 PM    WARN [DB Restart]: New clients created. Use one of these:
+[Nest] 201  - 02/09/2023, 8:28:00 PM    WARN [{"id":1,"name":"Teste"},{"id":1,"name":"Teste3"},{"id":1,"name":"Teste3"}]
+[Nest] 201  - 02/09/2023, 8:28:00 PM     LOG
+========================================
+
+[Nest] 201  - 02/09/2023, 8:28:00 PM     LOG [RoutesResolver] FindCompanyServicesController {/api/v1/service-request}: +6ms
+[Nest] 201  - 02/09/2023, 8:28:00 PM     LOG [RouterExplorer] Mapped {/api/v1/service-request/company, GET} route +6ms
+[Nest] 201  - 02/09/2023, 8:28:00 PM     LOG [RoutesResolver] CreateServiceController {/api/v1/service-request}: +1ms
+[Nest] 201  - 02/09/2023, 8:28:00 PM     LOG [RouterExplorer] Mapped {/api/v1/service-request/create, POST} route +2ms
+[Nest] 201  - 02/09/2023, 8:28:00 PM     LOG [RoutesResolver] FindServiceRequestController {/api/v1/service-request}: +1ms
+[Nest] 201  - 02/09/2023, 8:28:00 PM     LOG [RouterExplorer] Mapped {/api/v1/service-request/find/:id, GET} route +1ms
+[Nest] 201  - 02/09/2023, 8:28:00 PM     LOG [RoutesResolver] PingTestController {/ping}: +1ms
+[Nest] 201  - 02/09/2023, 8:28:00 PM     LOG [RouterExplorer] Mapped {/ping, GET} route +1ms
+[Nest] 201  - 02/09/2023, 8:28:00 PM     LOG [NestApplication] Nest application successfully started +5ms
+[Nest] 201  - 02/09/2023, 8:28:00 PM     LOG Server Up on port: 3000
+```
+
+Sucesso!: `LOG Server Up on port: 3000`
+
+Uma informação relevante é: `[{"id":1,"name":"Teste"},{"id":1,"name":"Teste3"},{"id":1,"name":"Teste3"}]`, com dados de clientes para serem usados em testes das rotas da API.
+
 ---
 
 Caso queira encerrar os containers, basta executar:
@@ -104,6 +133,8 @@ No banco, temos as entidades
 ```
 
 A seta `<--------` com o número `1` indica que uma empresa cliente (`Company`) tem uma chave estrangeira para muitos pedidos de serviço (`ServiceRequest`), enquanto a seta com o número `*` indica que um pedido de serviço tem uma referência para uma única empresa.
+
+Os dados de companhia são apenas para testes, por isso temos apenas os campos `id` e `name`.
 
 Os tipos dos dados estão representados na tabela abaixo. Alguns dados estão salvos no formato BJON (Binary JSON) e eu irei explicar o motivo de usar esse tipo.
 
