@@ -159,3 +159,85 @@ Os tipos dos dados estão representados na tabela abaixo. Alguns dados estão sa
 | vehicles          | JSONB       |
 | companyId         | INTEGER     |
 ```
+
+Os campos `total`, `collectionAddress`, `vehicles` e `deliveries` são objetos e tem a tipagem no modelo (`model`) do projeto:
+
+```ts
+export type Company = {
+  id: number
+  name: string
+}
+export type Total = {
+  distance: number
+  duration: number
+  servicePrice: number
+}
+
+export type Address = {
+  lat: number
+  long: number
+}
+
+export type Vehicle = {
+  plate: string
+  model: string
+  brand: string
+  year: string
+}
+
+export interface Delivery {
+  vehicles: Vehicle[]
+  finalAddress: Address
+  lastAddress: Address
+  total: Omit<Total, 'servicePrice'>
+}
+```
+
+E o objeto final que representa uma solicitação de serviço de uma companhia:
+
+```ts
+export interface ServiceRequest {
+  id: string
+  serviceType: ServiceType
+  createdAt: Date
+  total: Total
+  collectionAddress: Address
+  deliveries: Delivery[]
+  vehicles: Vehicle[]
+  company: Company
+}
+```
+
+Por questões de interpretação, eu optei por salver os campos `total`, `collectionAddress`, `vehicles` e `deliveries` como tipo BJSON, pois os valores tem uma estrutura com seus campos contextualizada, logo, não há necessidade de criar novas colunas na tabela e os seus valores podem ser modificados dinamicamente. Um banco MongoDB poderia ser usado para armazenar esses dados, mas seria uma dependência irrelevante, por mais que os tipos dos campos internos não sejam tipados pelo banco, o próprio código do servidor garante uma tipagem de acordo com as regras da aplicação.
+
+---
+
+O tipo de dados JSONB (Binary JSON) no PostgreSQL é uma variante do tipo de dados JSON que oferece algumas vantagens sobre o JSON convencional:
+
+Armazenamento mais eficiente: O JSONB é armazenado em formato binário, o que significa que ele ocupa menos espaço do que o JSON convencional e é mais rápido de processar.
+
+Indexação: O JSONB pode ser indexado de forma mais eficiente do que o JSON convencional. Isso significa que as consultas que envolvem filtros baseados em valores JSONB serão executadas mais rapidamente.
+
+Modificação de dados: Com o JSONB, é possível atualizar ou modificar valores específicos em um objeto JSON sem precisar reconstruir todo o objeto. Isso é muito útil para aplicações que precisam atualizar frequentemente valores em objetos JSON de grande tamanho.
+
+Integridade de dados: O JSONB garante a integridade dos dados, pois ele valida a estrutura do objeto JSON antes de armazená-lo.
+
+Em resumo, o uso do tipo de dados JSONB no PostgreSQL oferece uma série de vantagens sobre o uso do JSON convencional, incluindo armazenamento mais eficiente, indexação mais eficiente, modificação de dados mais fácil e garantia de integridade de dados.
+
+---
+
+## Testes Automatizados
+
+Os códigos com regras de negócio foram feitos usando a metodologia TDD. Testes de unidade foram criados para os 3 casos de uso da aplicação.
+
+Foi criado testes de unidade para a class de repositório relacionada aos serviços. logo é necessário que o banco de dados esteja rodando para que os testes executem com sucesso.
+
+Para rodar os testes, execute o comando:
+
+```bash
+$ npm run test:server
+```
+
+Este comando irá subir o container do banco, garantir a sincronia das tabelas com o Prisma, e por fim executar os testes de unidade.
+
+Existem testes para a classe de repositório e a classe de consumo do serviço do Google, mas a cobertura dos testes foi focada apenas nos arquivos com regras de negócio (casos de uso).
