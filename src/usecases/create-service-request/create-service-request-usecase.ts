@@ -82,17 +82,9 @@ export class CreateServiceRequestUseCase implements CreateServiceRequest {
     const deliveriesWithAllFields: Delivery[] =
       await this.setAllDeliveriesFields(deliveries)
 
-    const total: Total = {
-      distance: deliveriesWithAllFields.reduce(
-        (prev, acc) => prev + acc.total.distance,
-        0,
-      ),
-      duration: deliveriesWithAllFields.reduce(
-        (prev, acc) => prev + acc.total.duration,
-        0,
-      ),
-      servicePrice: 0,
-    }
+    const total: Total = this.calculateTotalDistanceAndDuration(
+      deliveriesWithAllFields,
+    )
 
     total.servicePrice = this.calculateTotalServicePrice(total, serviceType)
 
@@ -196,6 +188,20 @@ export class CreateServiceRequestUseCase implements CreateServiceRequest {
     }
 
     return deliveriesWithAllFields
+  }
+
+  private calculateTotalDistanceAndDuration(deliveries: Delivery[]) {
+    return {
+      distance: deliveries.reduce(
+        (prev, delivery) => prev + delivery.total.distance,
+        0,
+      ),
+      duration: deliveries.reduce(
+        (prev, delivery) => prev + delivery.total.duration,
+        0,
+      ),
+      servicePrice: 0,
+    }
   }
 
   private calculateTotalServicePrice(
