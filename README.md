@@ -10,6 +10,15 @@ O projeto foi construído em Node.js no back-end e usando alguns conceitos de **
 
 Apesar de ser uma aplicação de testes, esta tenta simular uma API real para consumo de serviços front-end ou back-end. Fora criado dados falsos (Fakers) de companhias clientes para simular a principal funcionalidade da API que é a criação de solicitações de serviços de entrega otimizada e listagem do total de serviços solicitados e criados por uma empresa cliente.
 
+# Índice
+
+- [Pré Requisitos](#pré-requisitos)
+- [Começando](#começando)
+- [API Endpoints](#api-endpoints)
+- [Diagrama do Banco de Dados](#diagrama-do-banco-de-dados)
+- [Testes Automatizados](#testes-automatizados)
+- [Tecnologias](#tecnologias)
+
 ## Pré Requisitos
 
 Antes de começar a testar este projeto, é importante que você tenha os seguintes programas instalados em seu computador:
@@ -112,6 +121,100 @@ Você deve receber como resposta:
 Caso você tenha a extensão [Rest Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) no VSCode, abra o arquivo `local.http` na pasta `rest-client` e execute o cURL de teste:
 
 ![img](./docs/images/http.png)
+
+## API Endpoints
+
+> ### GET /ping
+
+Este endpoint é utilizado para verificar se a API está ativa. Ele retorna um código de resposta HTTP 200 OK e uma mensagem `"pong"`.
+
+```bash
+curl --request GET \
+  --url http://localhost:3000/ping
+```
+
+> ### POST /api/v1/service-request/create
+
+Este endpoint é usado para criar uma nova solicitação de serviço. Ele espera um corpo JSON com as informações sobre a empresa, o tipo de serviço, o endereço de coleta e entregas (latitude e longitude) e veículos relacionados (marca, modelo, ano e placa).
+
+```bash
+curl --request POST \
+  --url http://localhost:3000/api/v1/service-request/create \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "company": {
+    "id": 1,
+    "name": "Teste"
+  },
+  "serviceType": "guincho",
+  "collectionAddress": {
+    "lat": -1.369406,
+    "long": -48.380052
+  },
+  "deliveries": [
+    {
+      "finalAddress": {
+        "lat": -1.368226,
+        "long": -48.377295
+      },
+      "vehicles": [
+        {
+          "brand": "VW",
+          "model": "Gol",
+          "year": "2015",
+          "plate": "ABC-1234"
+        }
+      ]
+    },
+    {
+      "finalAddress": {
+        "lat": -1.369100,
+        "long": -48.383126
+      },
+      "vehicles": [
+        {
+          "brand": "Ford",
+          "model": "Wrangler",
+          "year": "2012",
+          "plate": "CDE-1234"
+        }
+      ]
+    }
+  ]
+}'
+```
+
+> ### GET /api/v1/service-request/company
+
+Este endpoint é usado para obter uma lista de solicitações de serviço relacionadas a uma determinada companhia. Ele espera um corpo JSON com as informações da empresa (`id`), bem como as datas de início e fim para filtragem da pesquisa.
+
+```bash
+curl --request GET \
+  --url http://localhost:3000/api/v1/service-request/company \
+  --header 'Content-Type: application/json' \
+  --data '{
+	"companyId": 1,
+	"startDate": "2023-01-08T12:07:35.100Z",
+	"endDate": "2023-03-08T12:09:35.100Z"
+}'
+```
+
+> ### GET /api/v1/service-request/find/{serviceId}
+
+Este endpoint permite ao usuário buscar uma solicitação de serviço pelo seu `serviceId`. O `serviceId` deve ser passado como um parâmetro na URL.
+
+```bash
+curl --request GET \
+  --url http://localhost:3000/api/v1/service-request/find/{serviceId}
+```
+
+`*` Substitua o `{serviceId}` pelo id do serviço buscado.
+
+---
+
+Esses comandos cURL estão salvos no arquivo `local.http` e podem ser executados com a extensão REST Client do VSCode.
+
+---
 
 ## Diagrama do Banco de Dados
 
@@ -241,3 +344,22 @@ $ npm run test:server
 Este comando irá subir o container do banco, garantir a sincronia das tabelas com o Prisma, e por fim executar os testes de unidade.
 
 Existem testes para a classe de repositório e a classe de consumo do serviço do Google, mas a cobertura dos testes foi focada apenas nos arquivos com regras de negócio (casos de uso).
+
+`*` Os testes da classe de consumo da API do Google não consome recursos reais.
+`*` Não optei por criar testes de integração.
+
+# Tecnologias
+
+Para o a criação do projeto foram usadas as tecnologias e recursos:
+
+- [Git](https://git-scm.com/)
+- [Docker](https://www.docker.com)
+- [Docker Compose](https://docs.docker.com/compose)
+- [NestJS](https://nestjs.com)
+- [Node.js](https://nodejs.org)
+- [TypeScript](https://www.typescriptlang.org)
+- [Jest](https://jestjs.io)
+- [Prisma](https://www.prisma.io)
+- [PostgreSQL](https://www.postgresql.org)
+- [Axios](https://github.com/axios/axios)
+- [Google Maps Distance Matrix API](https://developers.google.com/maps/documentation/distance-matrix/start?hl=pt-br)

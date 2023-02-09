@@ -53,3 +53,23 @@ curl --request POST \
     }
   ]
 }'
+
+### 
+
+# Find Company Services
+
+curl --request GET \
+  --url http://localhost:3000/api/v1/service-request/company \
+  --header 'Content-Type: application/json' \
+  --data '{
+	"companyId": 1,
+	"startDate": "2023-01-08T12:07:35.100Z",
+	"endDate": "2023-03-08T12:09:35.100Z"
+}'
+
+###
+
+# Find Service Request
+
+curl --request GET \
+  --url http://localhost:3000/api/v1/service-request/find/{coloque-o-id-aqui}
