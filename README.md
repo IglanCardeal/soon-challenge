@@ -29,6 +29,16 @@ Antes de começar a testar este projeto, é importante que você tenha os seguin
 
 Esses programas são essenciais para garantir que você possa executar o projeto corretamente. Certifique-se de que eles estão instalados antes de continuar.
 
+## Começando
+
+Para começar com o projeto, você precisará clonar o repositório para sua máquina local e instalar as dependências necessárias. Use os comandos abaixo:
+
+```bash
+$ git clone https://github.com/IglanCardeal/soon-challenge.git
+$ cd soon-challenge
+$ npm i -s
+```
+
 - #### Arquivo `.env`
 
 - Antes de tudo, o projeto necessita de um arquivo `.env` definido e com variáveis de ambiente necessárias para rodar a aplicação. Para criá-lo, tome como base o arquivo `.env.example`. Renomeie-o para `.env`. Agora defina as variáveis necessárias.
@@ -43,16 +53,6 @@ GOOGLE_CLOUD_API_URL=https://maps.googleapis.com/maps/api/distancematrix/json
 - `DATABASE_URL` é definida a string de conexão com o banco de dados Postgres. **Não altere** este valor padrão `postgresql://prisma:prisma@0.0.0.0:5432/dev`.
 - `GOOGLE_CLOUD_API_KEY` coloque aqui sua chave de API do Google Cloud.
 - `GOOGLE_CLOUD_API_URL` esta é a url para consumir um serviço externo do Google. **Não altere** este valor padrão `https://maps.googleapis.com/maps/api/distancematrix/json`.
-
-## Começando
-
-Para começar com o projeto, você precisará clonar o repositório para sua máquina local e instalar as dependências necessárias. Use os comandos abaixo:
-
-```bash
-$ git clone https://github.com/IglanCardeal/soon-challenge.git
-$ cd soon-challenge
-$ npm i -s
-```
 
 - #### Docker e docker compose
 
