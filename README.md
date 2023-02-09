@@ -89,6 +89,23 @@ Do you want to continue? All data will be lost.
 
 - Se você optar por refazer a base de dados, aperte a tecla <kbd>Y</kbd>, mas tenha em mente que todos os dados existentes serão apagados.
 
+Agora teste a aplicação acessando a rota `http://localhost:3000/ping` (a porta padrão do servidor é `3000`) para fazer um teste da aplicação. Execute o cURL abaixo:
+
+```bash
+curl --request GET \
+  --url http://localhost:3000/ping
+```
+
+Você deve receber como resposta:
+
+```bash
+{"message":"Pong!"}
+```
+
+Caso você tenha a extensão [Rest Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) no VSCode, abra o arquivo `local.http` na pasta `rest-client` e execute o cURL de teste:
+
+![img](./docs/images/http.png)
+
 ## Running the app
 
 ```bash
