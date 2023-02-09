@@ -84,42 +84,47 @@ Caso você tenha a extensão [Rest Client](https://marketplace.visualstudio.com/
 
 ![img](./docs/images/http.png)
 
-## Running the app
+## Diagrama do Banco de Dados
 
-```bash
-# development
-$ npm run start
+No banco, temos as entidades
 
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+```none
++---------------+ (1)   (*) +------------------+
+|    Company    | <-------- |  ServiceRequest  |
++---------------+           +------------------+
+| id            |           | id               |
+| name          |           | serviceType      |
++---------------+           | createdAt        |
+                            | total            |
+                            | collectionAddress|
+                            | deliveries       |
+                            | vehicles         |
+                            | companyId        |
+                            +------------------+
 ```
 
-## Test
+A seta `<--------` com o número `1` indica que uma empresa cliente (`Company`) tem uma chave estrangeira para muitos pedidos de serviço (`ServiceRequest`), enquanto a seta com o número `*` indica que um pedido de serviço tem uma referência para uma única empresa.
 
-```bash
-# unit tests
-$ npm run test
+Os tipos dos dados estão representados na tabela abaixo. Alguns dados estão salvos no formato BJON (Binary JSON) e eu irei explicar o motivo de usar esse tipo.
 
-# e2e tests
-$ npm run test:e2e
+```none
+### Company
 
-# test coverage
-$ npm run test:cov
+| Column | Data Type |
+| ------ | -------- |
+| id     | INTEGER  |
+| name   | TEXT     |
+
+### ServiceRequest
+
+| Column            | Data Type   |
+| ----------------- | ----------- |
+| id                | TEXT        |
+| serviceType       | TEXT        |
+| createdAt         | TIMESTAMP(3)|
+| total             | JSONB       |
+| collectionAddress | JSONB       |
+| deliveries        | JSONB       |
+| vehicles          | JSONB       |
+| companyId         | INTEGER     |
 ```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
