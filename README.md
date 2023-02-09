@@ -20,6 +20,21 @@ Antes de começar a testar este projeto, é importante que você tenha os seguin
 
 Esses programas são essenciais para garantir que você possa executar o projeto corretamente. Certifique-se de que eles estão instalados antes de continuar.
 
+- #### Arquivo `.env`
+
+- Antes de tudo, o projeto necessita de um arquivo `.env` definido e com variáveis de ambiente necessárias para rodar a aplicação. Para criá-lo, tome como base o arquivo `.env.example`. Renomeie-o para `.env`. Agora defina as variáveis necessárias.
+
+```none
+DATABASE_URL="postgresql://prisma:prisma@0.0.0.0:5432/dev"
+
+GOOGLE_CLOUD_API_KEY=your-api-key
+GOOGLE_CLOUD_API_URL=https://maps.googleapis.com/maps/api/distancematrix/json
+```
+
+- `DATABASE_URL` é definida a string de conexão com o banco de dados Postgres. **Não altere** este valor padrão `postgresql://prisma:prisma@0.0.0.0:5432/dev`.
+- `GOOGLE_CLOUD_API_KEY` coloque aqui sua chave de API do Google Cloud.
+- `GOOGLE_CLOUD_API_URL` esta é a url para consumir um serviço externo do Google. **Não altere** este valor padrão `https://maps.googleapis.com/maps/api/distancematrix/json`.
+
 ## Começando
 
 Para começar com o projeto, você precisará clonar o repositório para sua máquina local e instalar as dependências necessárias. Use os comandos abaixo:
@@ -30,9 +45,49 @@ $ cd soon-challenge
 $ npm i -s
 ```
 
-- #### Docker
+- #### Docker e docker compose
 
-Uma vez que você tenha instalado as dependências, você pode iniciar o servidor de desenvolvimento executando o seguinte comando:
+- Uma vez que você tenha instalado as dependências, você pode iniciar o servidor e o banco de dados de desenvolvimento usando o Docker. O projeto possui os arquivos `docker-compose.yml` e `docker-compose-postgres.yml` que são usados para configurar e subir os containers do projeto através do script `up` no `package.json`. O mesmo possui o script `down` para desligar os containers da aplicação.
+
+Feito tudo isso, você pode digitar no terminal o comando:
+
+```bash
+$ npm run up
+```
+
+Ele vai executar alguns scripts para subir o container do Postgres, fazer os devidos ajustes do Prisma com o banco de dados e subir o container do servidor.
+
+Caso queira encerrar os containers, basta executar:
+
+```bash
+$ npm run down
+```
+
+- #### Alerta do Prisma
+
+- Uma vez criado e ajustado o banco de dados durante a primeira execução, o prisma pode exibir um alerta como o mostrado abaixo, mas não se preocupe, pois uma vez criado as tabelas do banco durante a primeira inicialização, não há necessidade de executar o comando novamente. Aperte a tecla <kbd>N</kbd> para continuar normalmente.
+
+```bash
+- Drift detected: Your database schema is not in sync with your migration history.
+
+The following is a summary of the differences between the expected database schema given your migrations files, and the actual schema of the database.
+
+It should be understood as the set of changes to get from the expected schema to the actual schema.
+
+[+] Added tables
+  - Company
+  - ServiceRequest
+
+[*] Changed the `ServiceRequest` table
+  [+] Added foreign key on columns (companyId)
+
+- The following migration(s) are applied to the database but missing from the local migrations directory: 20230208185234_init
+
+✔ We need to reset the "public" schema at "0.0.0.0:5432"
+Do you want to continue? All data will be lost.
+```
+
+- Se você optar por refazer a base de dados, aperte a tecla <kbd>Y</kbd>, mas tenha em mente que todos os dados existentes serão apagados.
 
 ## Running the app
 
